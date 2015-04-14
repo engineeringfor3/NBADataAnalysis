@@ -43,6 +43,7 @@ public class MemberPO {
 	public int scores;
 	public int oppositeOffenceTimes;
 	public double shotHitRate;
+	public int doubleTimes;
 	
 	public MemberPO(){
 		name=null;
@@ -78,10 +79,11 @@ public class MemberPO {
 		scores=0;
 		oppositeOffenceTimes=0;
 		shotHitRate=0.0;
+		doubleTimes=0;
 		
 	}
 	public int getAllOnTime(){
-		return 240*60*inMatches;
+		return 240*inMatches*60;
 	}
 	
 	public double getShotHitRate(){
@@ -195,9 +197,30 @@ public class MemberPO {
 		return Double.valueOf(df.format(result));
 	}
 	
+	public int[] getList(){
+		int [] list=new int[14];
+		list[0]=scores;
+		list[1]=rebounds;
+		list[2]=assists;
+		list[3]=scores+rebounds+assists;
+		list[4]=blockShots;
+		list[5]=steals;
+		list[6]=fouls;
+		list[7]=mistakes;
+		list[8]=onTime;
+		list[9]=getEfficiency();
+		list[10]=shots;
+		list[11]=threeShots;
+		list[12]=penaltyShots;
+		list[13]=doubleTimes;
+		return list;
+		
+	}
+	
 
 	
 	
 	
 
 }
+
