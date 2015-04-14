@@ -6,11 +6,9 @@ import java.util.*;
 import java.io.*;
 
 public class MemberLogic {
-	public Object[][] poToList() throws IOException{
-		MemberData md=new MemberData();
-		ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
-		memberList=md.toMemberList();
-		Object[][] result=new Object[memberList.size()][29];
+	public Object[][] poToList(ArrayList<MemberPO> memberList) throws IOException{
+		
+		Object[][] result=new Object[memberList.size()][37];
 		for(int i=0;i<memberList.size();i++){
 			MemberPO temp=memberList.get(i);
 			result[i][0]=temp.name;
@@ -42,23 +40,98 @@ public class MemberLogic {
 			result[i][26]=new Double(temp.getBlockShotRate());
 			result[i][27]=new Double(temp.getMistakeRate());
 			result[i][28]=new Double(temp.getUseRate());
+			if(temp.inMatches==0){
+				result[i][29]=new Double(0.0);
+				result[i][30]=new Double(0.0);
+				result[i][31]=new Double(0.0);
+				result[i][32]=new Double(0.0);
+				result[i][33]=new Double(0.0);
+				result[i][34]=new Double(0.0);
+				result[i][35]=new Double(0.0);
+				result[i][36]=new Double(0.0);
+						}
+			else{
+			result[i][29]=new Double(temp.rebounds/(temp.inMatches*1.0));
+			result[i][30]=new Double(temp.assists/(temp.inMatches*1.0));
+			result[i][31]=new Double(temp.onTime/(temp.inMatches*1.0));
+			result[i][32]=new Double(temp.steals/(temp.inMatches*1.0));
+			result[i][33]=new Double(temp.blockShots/(temp.inMatches*1.0));
+			result[i][34]=new Double(temp.mistakes/(temp.inMatches*1.0));
+			result[i][35]=new Double(temp.fouls/(temp.inMatches*1.0));
+			result[i][36]=new Double(temp.scores/(temp.inMatches*1.0));
+			
+			}
 		}
 		return result;
 	}
 	
-	public ArrayList<MemberPO> sortList(String position,String league,String subLeague)throws IOException{
+	public ArrayList<MemberPO> sortList(String position,String league,String subLeague,String sortData)throws IOException{
 		MemberData md=new MemberData();
 		ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
+		ArrayList<MemberPO> memberList1=new ArrayList<MemberPO>();
+		ArrayList<MemberPO> memberList2=new ArrayList<MemberPO>();
+		ArrayList<MemberPO> memberList3=new ArrayList<MemberPO>();
+		ArrayList<MemberPO> memberList4=new ArrayList<MemberPO>();
 		memberList=md.toMemberList();
 		for(MemberPO temp:memberList){
-			if(temp.team!=null&&temp.team.equals(position)){
-				System.out.println(temp.name+" "+temp.team);
-				
+			if((temp.position!=null&&temp.position.equals(position))||(position.equals("all"))){
+				memberList1.add(temp);
 			}
 		}
-		return memberList;
+		
+		for(MemberPO temp:memberList1){
+			if((temp.league!=null&&temp.league.equals(league))||(league.equals("all"))){
+				memberList2.add(temp);
+			}
+		}
+		for(MemberPO temp:memberList2){
+			if((temp.league!=null&&temp.subLeague.equals(subLeague))||(subLeague.equals("all"))){
+				memberList3.add(temp);
+			}
+		}
+		
+		String sortDatas[]={"µÃ·Ö","Àº°å","Öú¹¥","µÃ·Ö/Öú¹¥/Àº°å","¸ÇÃ±","ÇÀ¶Ï","·¸¹æ","Ê§Îó","·ÖÖÓ","Ð§ÂÊ","Í¶Àº","Èý·Ö","·£Çò","Á½Ë«"};
+		for(int n=0;n<sortDatas.length;n++){
+			if(sortDatas[n].equals(sortData)){
+				memberList4=getList(n,memberList3);
+				break;
+			}
+				
+		}
+		return memberList4;
+		
+			
 		
 	}
+	
+	
+	public ArrayList<MemberPO> getList(int k,ArrayList<MemberPO> memberList3){
+		ArrayList<MemberPO> memberList4=new ArrayList<MemberPO>();
+		for(int i=0;i<memberList3.size()-1;i++){
+			for(int j=memberList3.size()-1;j>i;j--){
+				if(memberList3.get(j).getList()[k]>memberList3.get(j-1).getList()[k]){
+					MemberPO temp=memberList3.get(j);
+					MemberPO temp1=memberList3.get(j-1);
+					memberList3.remove(j);
+					memberList3.add(j,temp1);
+					memberList3.remove(j-1);
+					memberList3.add(j-1,temp);
+					
+				}
+			}
+		}
+		if(memberList3.size()<=50)
+			return memberList3;
+		else{
+			for(int i=0;i<50;i++){
+				MemberPO temp=memberList3.get(i);
+				memberList4.add(temp);
+			}
+			return memberList4;
+		}
+		
+	}
+	
 	
 	
 	
