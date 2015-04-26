@@ -1,5 +1,7 @@
 package vo;
 
+import java.util.ArrayList;
+
 public class teamVO {
 	private String name;
 	private int games;
@@ -29,6 +31,15 @@ public class teamVO {
 	private double defenseReboundEfficiency;
 	private double stealEfficiency;
 	private double assistEfficiency;
+	
+	
+	private String shorts;
+	private String place;
+	private String zone;
+	private String subZone;
+	private String homeCourt;
+	private String launchTime;
+	private ArrayList<MatchVO> matchList;
 	
 	public teamVO(String n,int g,int fgm,int fga,int tgm,int tga,int ftm,int fta,int or,
 			int dr,int r,int a,int s,int b,int e,int f,int sc,double fgp,double tgp,
