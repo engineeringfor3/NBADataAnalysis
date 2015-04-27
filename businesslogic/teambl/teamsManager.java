@@ -289,4 +289,10 @@ public class teamsManager implements TeamBLService{
 		// TODO 自动生成的方法存根
 		return null;
 	}
+
+	@Override
+	public teamVO getTeamData(String team) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
