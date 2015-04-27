@@ -7,7 +7,7 @@ public class MatchVO {
 	private String team;
 	private String team2;
 	private String scores;
-	private String sectionScore;
+	private String sectionScore;////test///
 	private ArrayList<playerInMatchesVO> players1;
 	private ArrayList<playerInMatchesVO> players2;
 	
