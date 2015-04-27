@@ -11,6 +11,7 @@ import po.MemberPO;
 
 
 
+
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -149,7 +150,11 @@ public class Member {
 		sortData.setBounds(410, 0,x,y);
 		b.setBounds(495, 0,x,y);
 		c.setBounds(575, 0,x,y);
-		scrollPane.setBounds(0, 50, 650, 450);
+		scrollPane.setBounds(0, 50, 650, 420);
+		
+		
+		TableColumn tc = table.getColumnModel().getColumn(0);
+		tc.setPreferredWidth(150);
 		
 		pl.add(l1);
 		pl.add(position);

@@ -11,7 +11,7 @@ import mainui.HomePage;
 import enumType.NBAteams;
 
 
-public class match implements ActionListener{
+public class match implements ActionListener,MouseListener{
 	JLabel[] l = new JLabel[30];
 	JLabel[] l2 = new JLabel[30];
 	int location1 = 0;
@@ -20,7 +20,7 @@ public class match implements ActionListener{
 	JButton b = new JButton("下一个");
 	JButton d = new JButton("上一个");
 	JButton e = new JButton("下一个");
-	JButton c = new JButton(new ImageIcon("vs.jpg"));
+	JLabel c = new JLabel(new ImageIcon("sv.png"));
 	JPanel p2 = new JPanel();
 	JPanel p1 = new JPanel();
 	JPanel p3 = new JPanel();
@@ -32,9 +32,10 @@ public class match implements ActionListener{
 		p3.setSize(675, 610);
 		a.addActionListener(this);
 		b.addActionListener(this);
-		c.addActionListener(this);
+		c.addMouseListener(this);
 		d.addActionListener(this);
 		e.addActionListener(this);
+		
 		createLabel();
 		p2.setLayout(new CardLayout());
 		for(int j=location1;j<30;j++){
@@ -112,27 +113,53 @@ public class match implements ActionListener{
 			if(location2 == 0)
 				d.setEnabled(false);
 		}
-		else{
-			MatchInformation m = new MatchInformation();
-			String name1 = list.get(location1);
-			String name2 = list.get(location2);
-			if(name1.equals(name2)){
-				JOptionPane.showMessageDialog(null,"两支球队不能相同");
-			}
-			else{
-				Icon temp1 = new ImageIcon(name1+".png");
-				Icon temp2 = new ImageIcon(name2+".png");
-				JPanel result = m.go(name1,name2,temp1,temp2);
-				HomePage.screen.get(HomePage.count-1).setVisible(false);
-				HomePage.screen.add(result);
-				HomePage.count++;
-				HomePage.first.add(result);
-			}
-		}
 	}
 		
 	public JPanel go(){
 		new match();
 		return p3;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		MatchInformation m = new MatchInformation();
+		String name1 = list.get(location1);
+		String name2 = list.get(location2);
+		if(name1.equals(name2)){
+			JOptionPane.showMessageDialog(null,"两支球队不能相同");
+		}
+		else{
+			Icon temp1 = new ImageIcon(name1+".png");
+			Icon temp2 = new ImageIcon(name2+".png");
+			JPanel result = m.go(name1,name2,temp1,temp2);
+			HomePage.screen.get(HomePage.count-1).setVisible(false);
+			HomePage.screen.add(result);
+			HomePage.count++;
+			HomePage.first.add(result);
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
 	}
 }

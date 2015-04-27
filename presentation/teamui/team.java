@@ -6,91 +6,121 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
+import playerui.playerInfo;
 import mainui.HomePage;
 import enumType.NBAteams;
 
 
-public class team implements ActionListener{
-	JLabel[] l = new JLabel[30];
-	int location = 0;
-	JButton a = new JButton("上一个");
-	JButton b = new JButton("下一个");
-	JButton c = new JButton("确定");
-	JPanel p2 = new JPanel();
-	JPanel p3 = new JPanel();
-	ArrayList<String> list = new ArrayList<String>();
-		
+public class team implements MouseListener{
+	JPanel p = new JPanel();
+	String[] data = {"队伍","名称","赛区"};
+	JTable table = null;
+	MyTableModel model = null;
+	
 	public team(){
-		p3.setLayout(null);
-		p3.setSize(675, 610);
-		a.addActionListener(this);
-		b.addActionListener(this);
-		c.addActionListener(this);
-		createLabel();
-		p2.setLayout(new CardLayout());
-		for(int j=location;j<30;j++){
-			p2.add(list.get(j),l[j]);
+		p.setLayout(null);
+		p.setSize(650,610);
+		
+		Object[][] team = new Object[30][data.length];
+		
+		int i=0;
+		for(NBAteams a:NBAteams.values()){
+			ImageIcon temp = new ImageIcon(a.toString()+".png");
+			team[i][0] = temp;
+			team[i][1] = a.toString();
+			team[i][2] = "aa";
+			i++;
 		}
-		((CardLayout) p2.getLayout()).show(p2,list.get(0));
-		a.setEnabled(false);
-			
-		a.setBounds(100,120,80,50);
-		b.setBounds(400,120,80,50);
-		c.setBounds(250,250,80,50);
-		p2.setBounds(240,100,100,100);
-		p3.add(a);
-		p3.add(c);
-		p3.add(p2);
-		p3.add(b);
+		
+		model = new MyTableModel(team,data);
+		table = new JTable(model);
+		JScrollPane scroll = new JScrollPane(table);
+		scroll.setBounds(20,0,600,450);
+		
+		table.setRowHeight(80);
+		table.setOpaque(false);
+		DefaultTableCellRenderer cellrender = new DefaultTableCellRenderer();
+		cellrender.setHorizontalAlignment(JTextField.CENTER);
+		cellrender.setOpaque(false);
+		table.setDefaultRenderer(String.class, cellrender);
+		table.addMouseListener(this);
+		p.add(scroll);
 	}
+		
+	public JPanel go(){
+		new team();
+		return p;
+	}
+	
+	class MyTableModel extends DefaultTableModel{
+		public MyTableModel(Object[] cnames, int row) {
+			super(cnames, row);
+			}
 
-	private void createLabel() {
-		NBAteams[] a = NBAteams.values();
-		int i = 0;
-		for(NBAteams temp:a){
-			l[i] = new JLabel(new ImageIcon(temp.toString()+".png"));
-			list.add(temp.toString());
-			i = i+1;
-		}
+		public MyTableModel(Object[][] data, Object[] columnNames) {
+			super(data, columnNames);
+			}
+			         //important here
+		public Class<?> getColumnClass(int col) {
+			Vector<?> v = (Vector<?>) dataVector.elementAt(0);
+			return v.elementAt(col).getClass();
+			}
+
+		public boolean isCellEditable(int row, int col) {
+			Class<?> columnClass = getColumnClass(col);
+			return columnClass != ImageIcon.class;
+			}
+		
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("上一个")){
-			b.setEnabled(true);
-			location -= 1;
-			((CardLayout) p2.getLayout()).show(p2,list.get(location));
-				
-			if(location == 0)
-				a.setEnabled(false);
-		}
-		else if(e.getActionCommand().equals("下一个")){
-			a.setEnabled(true);
-			location += 1;
-			((CardLayout) p2.getLayout()).show(p2,list.get(location));
-				
-			if(location == 29)
-				b.setEnabled(false);
-		}
-		else{
-			String name = list.get(location);
-			Icon temp = new ImageIcon(name+".png");
-			teamDataAnalysis data = new teamDataAnalysis();
+	public void mouseClicked(MouseEvent e) {
+		if(table.getSelectedColumn() == 1){
+			teamDataAnalysis t = new teamDataAnalysis();
+			String name = (String) table.getValueAt(table.getSelectedRow(),
+					table.getSelectedColumn());
+			ImageIcon image = (ImageIcon) table.getValueAt(table.getSelectedRow(),
+					table.getSelectedColumn()-1);
+			
+			JPanel p4;
 			try {
-				JPanel p4 = data.go(name, temp);
+				p4 = t.go(name,image);
 				HomePage.screen.get(HomePage.count-1).setVisible(false);
 				HomePage.screen.add(p4);
 				HomePage.count++;
 				HomePage.first.add(p4);
 			} catch (IOException e1) {
+				// TODO 自动生成的 catch 块
 				e1.printStackTrace();
 			}
+			
 		}
 	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO 自动生成的方法存根
 		
-	public JPanel go(){
-		new team();
-		return p3;
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
 	}
 }
