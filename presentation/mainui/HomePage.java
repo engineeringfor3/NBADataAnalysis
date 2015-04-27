@@ -2,120 +2,171 @@ package mainui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.tree.*;
 
-import enumType.ResultMessage;
-import userbl.*;
-import vo.UserVO;
+import matchui.match;
 
-class Pic extends JPanel{
+import org.jvnet.substance.SubstanceLookAndFeel;
+import org.jvnet.substance.api.SubstanceConstants.ImageWatermarkKind;
+import org.jvnet.substance.api.SubstanceSkin;
+import org.jvnet.substance.skin.*;
+import org.jvnet.substance.watermark.SubstanceImageWatermark;
+
+import playerui.Member;
+import teamui.team;
+
+public class HomePage implements TreeSelectionListener{
+	JFrame f = new JFrame("NBA数据查询平台");
+	String[] operation = {"球队查询","球员查询","比赛查询","热点"};
+	public static JPanel first = new JPanel();           //第一层panel
+	JPanel subp = new JPanel();			  //第二层panel
+	public static int count = 0;          //获得相应的哪一层
+	JTree tree = null;
+	DefaultMutableTreeNode root = new DefaultMutableTreeNode("NBA数据查询平台");
+	public static ArrayList<JPanel> screen = new ArrayList<JPanel>();     //存放所有的JPanel
+	JPanel buttonP = new JPanel();
+	JButton back = new JButton("返回");
+	JButton front = new JButton("前进");
+		
+	public HomePage(){
+		f.setLayout(new BorderLayout());
+		first.setLayout(null);
+		first.setOpaque(false);
+		subp.setLayout(null);
+		subp.setOpaque(false);
+		buttonP.setOpaque(false);
+		first.add(subp);
+		screen.add(subp);
+		count++;
+		first.setSize(675,610);
+		subp.setSize(675,610);
+		
+		initTree();
+		
+		back.setBounds(0,0,20,20);
+		front.setBounds(40,0,20,20);
+		buttonP.add(back);
+		buttonP.add(front);
+			
+		f.getContentPane().add(BorderLayout.CENTER,first);
+		f.getContentPane().add(BorderLayout.NORTH,buttonP);
+		f.getContentPane().add(BorderLayout.WEST,tree);
+		f.setSize(800,650);
+		f.setLocation(300,60);
+		f.setVisible(true);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
 	
-	public Pic(BorderLayout borderLayout) {
-		super(borderLayout);
+	private void initTree() {
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode("比赛查询");
+		root.add(node);
+		node = new DefaultMutableTreeNode("球队查询");
+		root.add(node);
+		node = new DefaultMutableTreeNode("球员查询");
+		root.add(node);
+		node = new DefaultMutableTreeNode("热点查询");
+		root.add(node);
+		DefaultMutableTreeNode node1 = new DefaultMutableTreeNode("当天热点球员");
+		node.add(node1);
+		node1 = new DefaultMutableTreeNode("赛季热点球员");
+		node.add(node1);
+		node1 = new DefaultMutableTreeNode("赛季热点球队");
+		node.add(node1);
+		node1 = new DefaultMutableTreeNode("进步最快球员");
+		node.add(node1);
+		
+		tree = new JTree(root);
+		tree.setOpaque(false);
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		tree.addTreeSelectionListener(this);
 	}
-	public void paintComponent(Graphics g){    //添加背景图片
-		Image image1 = new ImageIcon("Blake Griffin.png").getImage();
-		Image image2 = new ImageIcon("Kobe Bryant.png").getImage();
-		g.drawImage(image1,0,-70,this);
-		g.drawImage(image2,400,0,this);
-	}
-}
 
-public class HomePage {
-	JFrame frame = new JFrame("NBA数据平台");
-	Pic panel = new Pic(null);
-	JTextField field = new JTextField();
-	JPasswordField password = new JPasswordField();
-	User user = new User();
- 	
+	class myModel extends DefaultListModel{
+		public myModel(){
+			for(int i=0;i<operation.length;i++){
+				this.addElement(operation[i]);
+			}
+		}
+	}
+	
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
+		JTree temp = (JTree) e.getSource();
+		DefaultMutableTreeNode selection = 
+			(DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+		
+		String nodeName = selection.toString();
+		if(selection.isLeaf()){
+			if(nodeName.equals("比赛查询")){
+				match c = new match();
+				JPanel result = c.go();
+				screen.get(count-1).setVisible(false);
+				screen.add(result);
+				count++;
+				first.add(result);
+			}
+			else if(nodeName.equals("球队查询")){
+				team c = new team();
+				JPanel result = c.go();
+				screen.get(count-1).setVisible(false);
+				screen.add(result);
+				count++;
+				first.add(result);
+			}
+			else if(nodeName.equals("球员查询")){
+				Member m = new Member();
+				JPanel result;
+				try {
+					result = m.go();
+					screen.get(count-1).setVisible(false);
+					screen.add(result);
+					count++;
+					first.add(result);
+				} catch (IOException e1) {
+					// TODO 自动生成的 catch 块
+					e1.printStackTrace();
+				}
+			}
+			else if(nodeName.equals("当天热点球员")){
+			/*	TodayHotPlayer h = new TodayHotPlayer();
+				JPanel result;
+				try{
+					result = h.go();
+					screen.get(count-1).setVisible(false);
+					screen.add(result);
+					count++;
+					first.add(result);
+				} catch (IOException e1) {
+					// TODO 自动生成的 catch 块
+					e1.printStackTrace();
+				}*/
+			}
+		}
+	}
+	
 	public static void main(String[] args){
-		HomePage a = new HomePage();
-		a.go();
-	}
-	
-	public void go(){	
-		int wide = frame.getToolkit().getScreenSize().width;      //获取屏幕长宽
-		int high = frame.getToolkit().getScreenSize().height;
-		
-		JLabel labelName = new JLabel("用户名",JLabel.RIGHT);
-		labelName.setOpaque(false);                            //设置控件透明
-		JLabel labelPassword = new JLabel("密码",JLabel.RIGHT);
-		labelPassword.setOpaque(false);
-		JButton buttonSure = new JButton("登陆");
-		buttonSure.addActionListener(new loginListener());
-		JButton buttonRegister = new JButton("注册");
-		buttonRegister.addActionListener(new registerListener());
-		JButton buttonFind = new JButton("忘记密码");
-		buttonFind.addActionListener(new findListener());
-		JButton skip = new JButton("跳过");
-		skip.addActionListener(new mainpageListener());
-		
-		frame.setSize(wide/2+100,high/2+200);
-		frame.setLocation(wide/4,high/6);
-		
-		panel.setLayout(null);
-		labelName.setBounds(250,220,50,25);
-		field.setBounds(310,220,150,25);
-		labelPassword.setBounds(250,270,50,25);
-		password.setBounds(310,270,150,25);
-		buttonSure.setBounds(350,320,65,25);
-		buttonRegister.setBounds(500,220,90,25);
-		buttonFind.setBounds(500,270,90,25);
-		skip.setBounds(680,10,70,25);
-		
-		panel.add(labelName);
-		panel.add(labelPassword);
-		panel.add(password);
-		panel.add(field);
-		panel.add(buttonFind);
-		panel.add(buttonRegister);
-		panel.add(buttonSure);
-		panel.add(skip);
-		
-		frame.getContentPane().add(panel);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-	
-	class loginListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			long id = Long.parseLong(field.getText());
-			String password2 = new String(password.getPassword());
-			ResultMessage result = user.verify(id, password2);
-			
-			if(result == ResultMessage.Failure){
-				JOptionPane.showMessageDialog(null,"用户名或密码输入错误");
-			}
-			
-			else{
-				UserVO u = user.findUser(id);
-				ChoosePage m = new ChoosePage();
-				m.go(u.getName());
-				frame.dispose();
-			}
-		}
-	}
-	
-	class registerListener implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			register r = new register();
-			r.go();
-		}
-	}
-	
-	class findListener implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			findpassword find = new findpassword();
-			find.go();
-		}
-	}
-	
-	class mainpageListener implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			ChoosePage m = new ChoosePage();
-			frame.dispose();
-			m.go("");
-		}
+		JFrame.setDefaultLookAndFeelDecorated(true);  
+	    JDialog.setDefaultLookAndFeelDecorated(true);  
+	    
+	    SwingUtilities.invokeLater(new Runnable() {  
+	        public void run() {  
+	        	try {  
+	        			SubstanceImageWatermark watermark  =   new  SubstanceImageWatermark("cba.jpg");
+	        			watermark.setKind(ImageWatermarkKind.SCREEN_CENTER_SCALE);
+	        			SubstanceSkin skin  =   new  RavenGraphiteGlassSkin().withWatermark(watermark);   //初始化有水印的皮肤
+
+	        			UIManager.setLookAndFeel(new  SubstanceRavenGraphiteGlassLookAndFeel());
+	                 	SubstanceLookAndFeel.setSkin(skin);  //设置皮肤 
+	        	}catch (Exception e) {  
+	        		JOptionPane.showMessageDialog(null, "Substance Graphite failed to initialize");  
+	        	}
+	        	new HomePage();
+	        }
+	    });
 	}
 }

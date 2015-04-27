@@ -8,8 +8,8 @@ import javax.swing.*;
 
 import org.apache.batik.transcoder.TranscoderException;
 
-import playerui.MemberUI;
-import teamui.teams;
+import playerui.Member;
+import teamui.team;
 
 class Pica extends JPanel{
 	
@@ -32,7 +32,7 @@ public class ChoosePage {
 		JButton team = new JButton("查询球队");
 		team.addActionListener(new teamListener());
 		JButton player = new JButton("查询球员");
-		player.addActionListener(new playerListener());
+	//	player.addActionListener(new playerListener());
 		JButton match = new JButton("查询比赛");
 		match.addActionListener(new matchListener());
 		
@@ -59,23 +59,23 @@ public class ChoosePage {
 
 	class teamListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			teams t = new teams();
+			team t = new team();
 			frame.dispose();
 			t.go();
 		}
 	}
 	
-	class playerListener implements ActionListener{
+/*	class playerListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			MemberUI m = new MemberUI();
+			Member m = new Member();
 			try {
-				m.start();
+				m.();
 			} catch (IOException e1) {
 				// TODO 自动生成的 catch 块
 				e1.printStackTrace();
 			}
 		}
-	}
+	}*/
 	
 	class matchListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
