@@ -61,6 +61,7 @@ public class TeamData implements TeamDataService{
 					temp.name=te[0];
 					if(te[1].equals("NOP"))
 					temp.shorts="NOH";
+					else
 					temp.shorts=te[1];
 					temp.location=te[2];
 					temp.block=te[3];
@@ -119,42 +120,43 @@ public class TeamData implements TeamDataService{
 	        dataList=getContentByLocalFile(f);
 	        
 	        for(int i=0;i<dataList.size();i++){
-	        	
 	        	if(dataList.get(i).length==1){
-	        		boolean contain=false;
 	        		first=i;
-	        		for(TeamPO t:teamList){
-	        			if(t.name.equals(dataList.get(i)[0])){
-	        				contain=true;
-	        			}
-	        			
-	        		}
-	        		if(contain==false){
-        				TeamPO p=new TeamPO();
-        				p.name=dataList.get(i)[0];
-        				teamList.add(p);
-        			}
 	        		break;
 	        	}
 	        }
 	        for(int i=first;i<dataList.size();i++){
-	        	
 	        	if(dataList.get(i).length==1){
-	        		boolean contain=false;
 	        		second=i;
-	        		for(TeamPO t:teamList){
-	        			if(t.name.equals(dataList.get(i)[0])){
-	        				contain=true;
-	        			}
-	        			
-	        		}
-	        		if(contain==false){
-        				TeamPO p=new TeamPO();
-        				p.name=dataList.get(i)[0];
-        				teamList.add(p);
-        			}
 	        	}
 	        }//得到文档的队伍名称以及位置
+	        
+	        boolean contain=false;
+	        for(TeamPO t:teamList){
+    			if(t.shorts.equals(dataList.get(first)[0])){
+    				contain=true;
+    			}
+    			
+    		}
+    		if(contain==false){
+				TeamPO p=new TeamPO();
+				String temp=dataList.get(second)[0];
+ 				p=getTeamLiveData(getTeamName(temp));
+				teamList.add(p);
+			}
+    		contain=false;
+    		 for(TeamPO t:teamList){
+     			if(t.shorts.equals(dataList.get(second)[0])){
+     				contain=true;
+     			}
+     			
+     		}
+     		if(contain==false){
+ 				TeamPO p=new TeamPO();
+ 				String temp=dataList.get(second)[0];
+ 				p=getTeamLiveData(getTeamName(temp));
+ 				teamList.add(p);
+ 			}
 	        
 	        	
 	        }
@@ -173,6 +175,48 @@ public class TeamData implements TeamDataService{
 	        		second=i;
 	        	}
 	        }//得到文档的队伍名称以及位置
+	       
+	        for(int j=0;j<teamList.size();j++){
+	        		TeamPO tem=teamList.get(j);
+	        		if(tem.shorts.equals(dataList.get(first)[0])){
+	        			tem.number+=1;
+	        			for(int i=first+1;i<second;i++){
+		        			tem.scores+=Integer.parseInt(dataList.get(i)[17]);
+		        			tem.rebounds+=Integer.parseInt(dataList.get(i)[11]);
+		        			tem.assists+=Integer.parseInt(dataList.get(i)[12]);
+		        			tem.blockShots+=Integer.parseInt(dataList.get(i)[14]);
+		        			tem.steals+=Integer.parseInt(dataList.get(i)[13]);
+		        			tem.shots+=Integer.parseInt(dataList.get(i)[4]);
+		        			tem.shotHits+=Integer.parseInt(dataList.get(i)[3]);
+		        			tem.threeShots+=Integer.parseInt(dataList.get(i)[6]);
+		        			tem.threeShotHits+=Integer.parseInt(dataList.get(i)[5]);
+		        			tem.penaltyShots+=Integer.parseInt(dataList.get(i)[8]);
+		        			tem.penaltyShotHits+=Integer.parseInt(dataList.get(i)[7]);
+		        		}
+	        		}
+	        		
+	        		if(tem.shorts.equals(dataList.get(second)[0])){
+	        			tem.number+=1;
+	        			for(int i=second+1;i<dataList.size();i++){
+		        			tem.scores+=Integer.parseInt(dataList.get(i)[17]);
+		        			tem.rebounds+=Integer.parseInt(dataList.get(i)[11]);
+		        			tem.assists+=Integer.parseInt(dataList.get(i)[12]);
+		        			tem.blockShots+=Integer.parseInt(dataList.get(i)[14]);
+		        			tem.steals+=Integer.parseInt(dataList.get(i)[13]);
+		        			tem.shots+=Integer.parseInt(dataList.get(i)[4]);
+		        			tem.shotHits+=Integer.parseInt(dataList.get(i)[3]);
+		        			tem.threeShots+=Integer.parseInt(dataList.get(i)[6]);
+		        			tem.threeShotHits+=Integer.parseInt(dataList.get(i)[5]);
+		        			tem.penaltyShots+=Integer.parseInt(dataList.get(i)[8]);
+		        			tem.penaltyShotHits+=Integer.parseInt(dataList.get(i)[7]);
+		        		}
+	        		}
+	        		teamList.remove(j);
+	        		teamList.add(j,tem);
+	        }
+	        
+	        
+	       
 	    }
 	    
 	
@@ -203,12 +247,6 @@ public class TeamData implements TeamDataService{
 		return result;
 	}
 	
-	public static void main(String[] args)throws IOException{
-		TeamData td=new TeamData();
-		MemberData md=new MemberData();
-		ArrayList<MatchPO> matchList=new ArrayList<MatchPO>();
-		ArrayList<TeamPO> teamList=td.getTeamList();
-		System.out.println(teamList.size());
-	}
+	
 
 }

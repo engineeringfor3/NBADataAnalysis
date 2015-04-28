@@ -5,6 +5,7 @@ import data.TeamData;
 import java.util.ArrayList;
 
 import po.MatchPO;
+import po.MemberPO;
 import po.TeamPO;
 import blservice.TeamBLService;
 import vo.MatchVO;
@@ -291,19 +292,144 @@ public class teamsManager implements TeamBLService{
 	
 	public ArrayList<teamVO> getSeasonHotTeam(String condition) throws IOException{
 		ArrayList<teamVO> teamList=new ArrayList<teamVO>();
-		ArrayList<TeamPO> pList=new ArrayList<TeamPO>();
+		ArrayList<TeamPO> poList=new ArrayList<TeamPO>();
 		TeamData td=new TeamData();
-		TeamPO p=td.getTeamLiveData("d");
-		teamVO v=new teamVO(p);
-		ArrayList<MatchPO> poList=td.getTeamMatches(v.getName());
-		ArrayList<MatchVO> t=new ArrayList<MatchVO>();
-		for(MatchPO q:poList){
-			MatchVO m=new MatchVO(q);
-			t.add(m);
+		poList=td.getTeamList();
+		if(condition.equals("场均得分")){
+			for(int i=0;i<poList.size()-1;i++){
+				for(int j=poList.size()-1;j>i;j--){
+					if(Double.valueOf(poList.get(j).getAverageScore())>Double.valueOf(poList.get(j-1).getAverageScore())){
+						TeamPO temp=poList.get(j);
+						TeamPO  temp1=poList.get(j-1);
+						poList.remove(j);
+						poList.add(j,temp1);
+						poList.remove(j-1);
+						poList.add(j-1,temp);
+						
+					}
+				}
+			}
 		}
-		v.setMatchList(t);
-		teamList.add(v);
+		if(condition.equals("场均篮板")){
+			for(int i=0;i<poList.size()-1;i++){
+				for(int j=poList.size()-1;j>i;j--){
+					if(Double.valueOf(poList.get(j).getAverageRebound())>Double.valueOf(poList.get(j-1).getAverageRebound())){
+						TeamPO temp=poList.get(j);
+						TeamPO  temp1=poList.get(j-1);
+						poList.remove(j);
+						poList.add(j,temp1);
+						poList.remove(j-1);
+						poList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("场均助攻")){
+			for(int i=0;i<poList.size()-1;i++){
+				for(int j=poList.size()-1;j>i;j--){
+					if(Double.valueOf(poList.get(j).getAverageAssist())>Double.valueOf(poList.get(j-1).getAverageAssist())){
+						TeamPO temp=poList.get(j);
+						TeamPO  temp1=poList.get(j-1);
+						poList.remove(j);
+						poList.add(j,temp1);
+						poList.remove(j-1);
+						poList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("场均盖帽")){
+			for(int i=0;i<poList.size()-1;i++){
+				for(int j=poList.size()-1;j>i;j--){
+					if(Double.valueOf(poList.get(j).getAverageAssist())>Double.valueOf(poList.get(j-1).getAverageAssist())){
+						TeamPO temp=poList.get(j);
+						TeamPO  temp1=poList.get(j-1);
+						poList.remove(j);
+						poList.add(j,temp1);
+						poList.remove(j-1);
+						poList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("场均抢断")){
+			for(int i=0;i<poList.size()-1;i++){
+				for(int j=poList.size()-1;j>i;j--){
+					if(Double.valueOf(poList.get(j).getAverageAssist())>Double.valueOf(poList.get(j-1).getAverageAssist())){
+						TeamPO temp=poList.get(j);
+						TeamPO  temp1=poList.get(j-1);
+						poList.remove(j);
+						poList.add(j,temp1);
+						poList.remove(j-1);
+						poList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("投篮命中率")){
+			for(int i=0;i<poList.size()-1;i++){
+				for(int j=poList.size()-1;j>i;j--){
+					if(Double.valueOf(poList.get(j).getShotRate())>Double.valueOf(poList.get(j-1).getShotRate())){
+						TeamPO temp=poList.get(j);
+						TeamPO  temp1=poList.get(j-1);
+						poList.remove(j);
+						poList.add(j,temp1);
+						poList.remove(j-1);
+						poList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("三分命中率")){
+			for(int i=0;i<poList.size()-1;i++){
+				for(int j=poList.size()-1;j>i;j--){
+					if(Double.valueOf(poList.get(j).getThreeShotRate())>Double.valueOf(poList.get(j-1).getThreeShotRate())){
+						TeamPO temp=poList.get(j);
+						TeamPO  temp1=poList.get(j-1);
+						poList.remove(j);
+						poList.add(j,temp1);
+						poList.remove(j-1);
+						poList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("罚球命中率")){
+			for(int i=0;i<poList.size()-1;i++){
+				for(int j=poList.size()-1;j>i;j--){
+					if(Double.valueOf(poList.get(j).getPenaltyShotRate())>Double.valueOf(poList.get(j-1).getPenaltyShotRate())){
+						TeamPO temp=poList.get(j);
+						TeamPO  temp1=poList.get(j-1);
+						poList.remove(j);
+						poList.add(j,temp1);
+						poList.remove(j-1);
+						poList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		
+		for(int i=0;i<5;i++){
+			TeamPO p=poList.get(i);
+			teamVO v=new teamVO(p);
+			ArrayList<MatchPO> matchList=td.getTeamMatches(v.getName());
+			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
+			for(MatchPO e:matchList){
+				MatchVO m=new MatchVO(e);
+				t.add(m);
+			}
+			v.setMatchList(t);
+			teamList.add(v);
+		}
 		return teamList;
+		
 	}
 
 	
