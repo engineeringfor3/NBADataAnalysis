@@ -1,10 +1,7 @@
-package vo;
+package po;
 
-import java.util.ArrayList;
 
-import po.MatchPO;
-
-public class MatchVO {
+public class MatchPO {
 	private String date;
 	private String team1;
 	private String team2;
@@ -13,25 +10,13 @@ public class MatchVO {
 	private String [][] players1;
 	private String [][] players2;
 	
-	public MatchVO(MatchPO t){
-		this.date = t.getDate();
-		this.team1 = t.getTeam1();
-		this.team2 = t.getTeam2();
-		this.scores = t.getScore();
-		this.sectionScore = t.getSectionScore();
-		this.players1=t.getPlayers1();
-		this.players2=t.getPlayers2();
-		
-	}
-	public MatchVO(String date,String team1,String team2,String scores,String sectionScore,String[][] players1,String[][] players2){
-		this.date = date;
-		this.team1 = team1;
-		this.team2 = team2;
-		this.scores = scores;
-		this.sectionScore = sectionScore;
-		this.players1=players1;
-		this.players2=players2;
-		
+	
+	public MatchPO(){
+		this.date = null;
+		this.team1 = null;
+		this.team2 = null;
+		this.scores = null;
+		this.sectionScore = null;
 		
 	}
 	
@@ -68,26 +53,26 @@ public class MatchVO {
 	}
 	
 	public String getSectionScore(){
-		return this.scores;
+		return this.sectionScore;
 	}
 	
 	public void setSectionScore(String s){
 		this.sectionScore = s;
 	}
 	
-	public String[][] getPlayer1(){
+	public String[][] getPlayers1(){
 		return this.players1;
 	}
 	
-	public void setPlayer1(String[][] a){
+	public void setPlayers1(String[][] a){
 		this.players1 = a;
 	}
 	
-	public String[][] getPlayer2(){
+	public String[][] getPlayers2(){
 		return this.players2;
 	}
 	
-	public void setPlayer2(String[][] a){
+	public void setPlayers2(String[][] a){
 		this.players2 = a;
 	}
 }

@@ -2,6 +2,8 @@ package vo;
 
 import java.util.ArrayList;
 
+
+import po.TeamPO;
 public class teamVO {
 	private String name;
 	private int games;
@@ -40,6 +42,17 @@ public class teamVO {
 	private String homeCourt;
 	private String launchTime;
 	private ArrayList<MatchVO> matchList;
+	
+	
+	public teamVO(TeamPO p){
+		this.name=p.name;
+		this.shorts=p.shorts;
+		this.place=p.location;
+		this.zone=p.block;
+		this.subZone=p.subBlock;
+		this.homeCourt=p.mainPlace;
+		this.launchTime=p.time;
+	}
 	
 	public teamVO(String n,int g,int fgm,int fga,int tgm,int tga,int ftm,int fta,int or,
 			int dr,int r,int a,int s,int b,int e,int f,int sc,double fgp,double tgp,
@@ -297,5 +310,30 @@ public class teamVO {
 	
 	public void setAE(double a){
 		this.assistEfficiency = a;
+	}
+	
+	public void setMatchList(ArrayList<MatchVO> list){
+		this.matchList=list;
+	}
+	public ArrayList<MatchVO> getMatchList(){
+		return matchList;
+	}
+	public String getShorts(){
+		return shorts;
+	}
+	public String getPlace(){
+		return place;
+	}
+	public String getZone(){
+		return zone;
+	}
+	public String getSubZone(){
+		return subZone;
+	}
+	public String getHomeCourt(){
+		return homeCourt;
+	}
+	public String getLaunchTime(){
+		return launchTime;
 	}
 }

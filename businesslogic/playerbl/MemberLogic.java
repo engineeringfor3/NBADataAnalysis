@@ -1,11 +1,16 @@
 package playerbl;
 import po.MemberPO;
 
-import dataservice.MemberData;
+import po.MatchPO;
+import vo.MemberVO;
+import blservice.PlayerBLService;
+import vo.MatchVO;
+import vo.MemberVO;
+import data.MemberData;
 import java.util.*;
 import java.io.*;
 
-public class MemberLogic {
+public class MemberLogic implements PlayerBLService{
 	public Object[][] poToList(ArrayList<MemberPO> memberList) throws IOException{
 		
 		Object[][] result=new Object[memberList.size()][37];
@@ -132,9 +137,315 @@ public class MemberLogic {
 		
 	}
 	
+	public MemberVO getPlayerData(String name)throws IOException{
+		MemberData md=new MemberData();
+		MemberPO mp=new MemberPO();
+		mp=md.getMemberLiveData(name);
+		ArrayList<MatchPO> poList=md.getMemberMatches(name);
+		ArrayList<MatchVO> t=new ArrayList<MatchVO>();
+		for(MatchPO p:poList){
+			MatchVO v=new MatchVO(p);
+			t.add(v);
+		}
+		MemberVO result=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,t);
+		return result;
+	}
+	
+	public String[][] getHotPlayer(String condition)throws IOException{
+		String[][] answer=new String[5][];
+		ArrayList<String[]> memberList=new ArrayList<String[]>();
+		MemberData md=new MemberData();
+		memberList =md.todayMembers();
+		if(condition.equals("得分")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Integer.parseInt(memberList.get(j)[17])>Integer.parseInt(memberList.get(j-1)[17])){
+						String[] temp=memberList.get(j);
+						String[] temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("篮板")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Integer.parseInt(memberList.get(j)[11])>Integer.parseInt(memberList.get(j-1)[11])){
+						String[] temp=memberList.get(j);
+						String[] temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("助攻")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Integer.parseInt(memberList.get(j)[12])>Integer.parseInt(memberList.get(j-1)[12])){
+						String[] temp=memberList.get(j);
+						String[] temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("盖帽")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Integer.parseInt(memberList.get(j)[14])>Integer.parseInt(memberList.get(j-1)[14])){
+						String[] temp=memberList.get(j);
+						String[] temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("抢断")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Integer.parseInt(memberList.get(j)[13])>Integer.parseInt(memberList.get(j-1)[13])){
+						String[] temp=memberList.get(j);
+						String[] temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		for(int i=0;i<5;i++){
+			answer[i]=memberList.get(i);
+		}
+		return answer;
+		
+	}
+	public ArrayList<MemberVO> getSeasonHotPlayer(String condition)throws IOException{
+		ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
+		ArrayList<MemberVO> resultList=new ArrayList<MemberVO>();
+		MemberData md=new MemberData();
+		memberList=md.newMemberList();
+		if(condition.equals("场均得分")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).averageScores)>Double.valueOf(memberList.get(j-1).averageScores)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("场均篮板")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).averageRebounds)>Double.valueOf(memberList.get(j-1).averageRebounds)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("场均助攻")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).averageAssists)>Double.valueOf(memberList.get(j-1).averageAssists)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("场均盖帽")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).averageBlocks)>Double.valueOf(memberList.get(j-1).averageBlocks)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("场均抢断")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).averageSteals)>Double.valueOf(memberList.get(j-1).averageSteals)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("三分命中率")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).threeShotRate)>Double.valueOf(memberList.get(j-1).threeShotRate)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("投篮命中率")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).shotHitRate)>Double.valueOf(memberList.get(j-1).shotHitRate)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("罚球命中率")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).penaltyShotRate)>Double.valueOf(memberList.get(j-1).penaltyShotRate)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		for(int i=0;i<5;i++){
+			MemberPO h=memberList.get(i);
+			MemberPO mp=md.getMemberLiveData(h.name);
+			ArrayList<MatchPO> poList=md.getMemberMatches(mp.name);
+			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
+			for(MatchPO p:poList){
+				MatchVO m=new MatchVO(p);
+				t.add(m);
+			}
+			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,t,md.getMatchInfo(mp.name));
+			resultList.add(v);
+		}
+		return resultList;
+	}
+	public ArrayList<MemberVO> getProgressPlayer(String condition)throws IOException{
+		ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
+		ArrayList<MemberVO> resultList=new ArrayList<MemberVO>();
+		MemberData md=new MemberData();
+		memberList=md.newMemberList();
+		if(condition.equals("场均得分")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).scoreProgressRate)>Double.valueOf(memberList.get(j-1).scoreProgressRate)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("场均篮板")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).reboundProgressRate)>Double.valueOf(memberList.get(j-1).reboundProgressRate)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		if(condition.equals("场均助攻")){
+			for(int i=0;i<memberList.size()-1;i++){
+				for(int j=memberList.size()-1;j>i;j--){
+					if(Double.valueOf(memberList.get(j).assistProgressRate)>Double.valueOf(memberList.get(j-1).assistProgressRate)){
+						MemberPO temp=memberList.get(j);
+						MemberPO  temp1=memberList.get(j-1);
+						memberList.remove(j);
+						memberList.add(j,temp1);
+						memberList.remove(j-1);
+						memberList.add(j-1,temp);
+						
+					}
+				}
+			}
+		}
+		for(int i=0;i<5;i++){
+			MemberPO h=memberList.get(i);
+			MemberPO mp=md.getMemberLiveData(h.name);
+			ArrayList<MatchPO> poList=md.getMemberMatches(mp.name);
+			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
+			for(MatchPO p:poList){
+				MatchVO v=new MatchVO(p);
+				t.add(v);
+			}
+			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,mp.scoreProgressRate,mp.reboundProgressRate,mp.assistProgressRate,t,md.getMatchInfo(mp.name));
+			resultList.add(v);
+		}
+		return resultList;
+	}
+	
+	
 	
 	
 	
 	
 
 }
+

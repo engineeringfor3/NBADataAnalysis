@@ -1,9 +1,13 @@
 package teambl;
 
 import java.io.*;
+import data.TeamData;
 import java.util.ArrayList;
 
+import po.MatchPO;
+import po.TeamPO;
 import blservice.TeamBLService;
+import vo.MatchVO;
 import vo.teamVO;
 
 public class teamsManager implements TeamBLService{
@@ -284,15 +288,44 @@ public class teamsManager implements TeamBLService{
 		}
 	}
 
-	@Override
-	public ArrayList<teamVO> getSeasonHotTeam(String condition) {
-		// TODO 自动生成的方法存根
-		return null;
+	
+	public ArrayList<teamVO> getSeasonHotTeam(String condition) throws IOException{
+		ArrayList<teamVO> teamList=new ArrayList<teamVO>();
+		ArrayList<TeamPO> pList=new ArrayList<TeamPO>();
+		TeamData td=new TeamData();
+		TeamPO p=td.getTeamLiveData("d");
+		teamVO v=new teamVO(p);
+		ArrayList<MatchPO> poList=td.getTeamMatches(v.getName());
+		ArrayList<MatchVO> t=new ArrayList<MatchVO>();
+		for(MatchPO q:poList){
+			MatchVO m=new MatchVO(q);
+			t.add(m);
+		}
+		v.setMatchList(t);
+		teamList.add(v);
+		return teamList;
 	}
 
-	@Override
+	
 	public teamVO getTeamData(String team) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		TeamData td=new TeamData();
+		TeamPO p=td.getTeamLiveData(team);
+		teamVO v=new teamVO(p);
+		ArrayList<MatchPO> poList=td.getTeamMatches(team);
+		ArrayList<MatchVO> t=new ArrayList<MatchVO>();
+		for(MatchPO w:poList){
+			MatchVO k=new MatchVO(w);
+			t.add(k);
+		}
+		v.setMatchList(t);
+		return v;
+	}
+	
+	public static void main(String[] args)throws IOException{
+		teamsManager tm=new teamsManager();
+		teamVO test=tm.getTeamData("Rockets");
+		ArrayList<MatchVO> t=test.getMatchList();
+		System.out.println(t.size());
 	}
 }
+

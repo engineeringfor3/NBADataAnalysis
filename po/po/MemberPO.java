@@ -1,11 +1,14 @@
 package po;
 
 import java.io.File;
+
 import java.text.DecimalFormat;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import vo.MatchVO;
 
 public class MemberPO {
 	DecimalFormat df = new DecimalFormat("#.00");
@@ -15,6 +18,13 @@ public class MemberPO {
 	public String position;
 	public String league;
 	public String subLeague;
+	public String number;
+	public String height;
+	public String weight;
+	public String birth;
+	public String age;
+	public String exp;
+	public String school;
 	public int inMatches;
 	public int firstMatches;
 	public int onTime;
@@ -45,7 +55,54 @@ public class MemberPO {
 	public double shotHitRate;
 	public int doubleTimes;
 	
+	public double averageScores;
+	public double averageRebounds;
+	public double averageAssists;
+	public double averageBlocks;
+	public double averageSteals;
+	public double threeShotRate;
+	public double penaltyShotRate;
+	
+	public double beforeFiveAverageScore;
+	public double  fiveAverageScore;
+	public int   firstScore;
+	public int secondScore;
+	public int thirdScore;
+	public int fourthScore;
+	public int fifthScore;
+	public double scoreProgressRate;
+	
+	public double beforeFiveAverageRebound;
+	public double  fiveAverageRebound;
+	public int   firstRebound;
+	public int secondRebound;
+	public int thirdRebound;
+	public int fourthRebound;
+	public int fifthRebound;
+	public double reboundProgressRate;
+	
+	public double beforeFiveAverageAssist;
+	public double  fiveAverageAssist;
+	public int   firstAssist;
+	public int secondAssist;
+	public int thirdAssist;
+	public int fourthAssist;
+	public int fifthAssist;
+	public double assistProgressRate;
+	
+	public ArrayList<MatchPO> matchList;
+	public ArrayList<String[]> matchInfo;
 	public MemberPO(){
+		reboundProgressRate=0.0;
+		scoreProgressRate=0.0;
+		assistProgressRate=0.0;
+		number=null;
+		height=null;
+		weight=null;
+		birth=null;
+		age=null;
+		exp=null;
+		school=null;
 		name=null;
 		team=null;
 		position=null;
@@ -223,4 +280,3 @@ public class MemberPO {
 	
 
 }
-
