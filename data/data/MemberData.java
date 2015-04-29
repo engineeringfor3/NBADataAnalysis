@@ -870,7 +870,11 @@ public class MemberData implements MemberDataService{
 			
 		}
 		
-		
+		public static void main(String[] args)throws IOException{
+			MemberData md=new MemberData();
+			MemberPO p=md.getMemberLiveData("Aaron Brooks");
+			System.out.println(p.scores);
+		}
 		
 		
 		

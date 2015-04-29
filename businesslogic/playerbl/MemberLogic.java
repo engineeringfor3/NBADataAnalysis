@@ -143,7 +143,7 @@ public class MemberLogic implements PlayerBLService{
 		MemberData md=new MemberData();
 		MemberPO mp=new MemberPO();
 		mp=md.getMemberLiveData(name);
-		ArrayList<MatchPO> poList=md.getMemberMatches(name);
+		ArrayList<MatchPO> poList=mp.matchList;
 		ArrayList<MatchVO> t=new ArrayList<MatchVO>();
 		for(MatchPO p:poList){
 			MatchVO v=new MatchVO(p);
@@ -234,7 +234,8 @@ public class MemberLogic implements PlayerBLService{
 			}
 		}
 		for(int i=0;i<5;i++){
-			answer[i]=memberList.get(i);
+			String[] hehe=memberList.get(i);
+			
 		}
 		return answer;
 		
@@ -454,6 +455,8 @@ public class MemberLogic implements PlayerBLService{
 		}
 		return list;
 	}
+	
+	
 	
 	
 	
