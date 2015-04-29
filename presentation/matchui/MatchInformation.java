@@ -2,6 +2,7 @@ package matchui;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -23,7 +24,7 @@ public class MatchInformation {
 	
 	String[] match = {"比赛日期","比赛队伍","总比分","小节比分"};
 	
-	public JPanel go(String team1,String team2,Icon image1,Icon image2){
+	public JPanel go(String team1,String team2,Icon image1,Icon image2) throws IOException{
 		p.setLayout(null);
 		p.setSize(650,610);
 		
@@ -32,7 +33,7 @@ public class MatchInformation {
 		String[][] data = new String[list.size()][4];
 		for(int i=0;i<data.length;i++){
 			data[i][0] = list.get(i).getDate();
-			data[i][1] = list.get(i).getTeam()+"-"+list.get(i).getTeam2();
+			data[i][1] = list.get(i).getTeam1()+"-"+list.get(i).getTeam2();
 			data[i][2] = list.get(i).getScore();
 			data[i][3] = list.get(i).getSectionScore();
 		}

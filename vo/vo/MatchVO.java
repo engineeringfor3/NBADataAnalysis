@@ -68,7 +68,7 @@ public class MatchVO {
 	}
 	
 	public String getSectionScore(){
-		return this.scores;
+		return this.sectionScore;
 	}
 	
 	public void setSectionScore(String s){

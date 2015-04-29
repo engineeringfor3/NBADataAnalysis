@@ -1,5 +1,4 @@
 package playerui;
-import dataservice.MemberData;
 import playerbl.MemberLogic;
 import po.MemberPO;
 
