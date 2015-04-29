@@ -11,6 +11,7 @@ import po.MemberPO;
 
 
 
+
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -23,6 +24,7 @@ import java.io.*;
 
 import javax.swing.table.AbstractTableModel;  
 
+import data.MemberData;
 import mainui.ChoosePage;
 import mainui.HomePage;
 
@@ -31,7 +33,6 @@ import mainui.HomePage;
 
 public class Member {
 	MemberLogic ml = new MemberLogic();
-	MemberData md = new MemberData();
 	MyTableModel model = null;
 	JTable table = null;
 	JComboBox position,league,subLeague,sortData;	
@@ -43,7 +44,7 @@ public class Member {
 
 	public JPanel go() throws IOException{
 		ArrayList<MemberPO> memberList = new ArrayList<MemberPO>();
-		memberList = md.toMemberList();
+		memberList = ml.toMemberList();
 		Object[][] data = ml.poToList(memberList);
 		
 		final String[] columnNames = { "球员名称", "所属球队", "参赛场数",  
@@ -125,7 +126,7 @@ public class Member {
 			public void actionPerformed(ActionEvent e){
 				try{
 				ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
-				memberList=md.toMemberList();
+				memberList = ml.toMemberList();
 				Object[][] data=ml.poToList(memberList);
 				model.setData(data,columnNames); 
                 table.updateUI();

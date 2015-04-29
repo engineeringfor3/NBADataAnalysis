@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import vo.MatchVO;
 import mainui.HomePage;
@@ -48,34 +49,38 @@ public class MatchInformation {
 		jsp.setBounds(0,210,655,350);
 		table.setOpaque(false);
 		
-		JLabel picture1 = new JLabel(image1);
-		JLabel picture2 = new JLabel(image2);
+		picture1 = new JLabel(image1);
+		picture2 = new JLabel(image2);
+		JLabel vs = new JLabel(new ImageIcon("sv.png"));
 		
-		picture1.setBounds(100,20,100,100);
-		picture2.setBounds(420,20,100,100);
+		picture1.setBounds(100,30,100,100);
+		picture2.setBounds(420,30,100,100);
+		vs.setBounds(240,0,150,150);
+		
+		for(int k=0;k<3;k++){
+			TableColumn column = table.getColumnModel().getColumn(k);
+			column.setMaxWidth(120);
+			column.setMinWidth(120);
+		}
 		
 		p.add(jsp);
 		p.add(picture1);
 		p.add(picture2);
+		p.add(vs);
 		return p;
 	}
 	
 	class SelectListener implements MouseListener{
 		public void mouseClicked(MouseEvent e) {
-			if(table.getSelectedColumn() == 0){
-				SingleMatch m = new SingleMatch();
-				String temp = (String) table.getValueAt(table.getSelectedRow(),table.getSelectedColumn());
+			JTable temp = (JTable) e.getSource();
+			SingleMatch m = new SingleMatch();
 				
-				for(int i = 0;i<list.size();i++){
-					if(list.get(i).getDate().equals(temp)){
-						JPanel p4 = m.go(list.get(i),picture1,picture2);
-						HomePage.screen.get(HomePage.count-1).setVisible(false);
-						HomePage.screen.add(p4);
-						HomePage.count++;
-						HomePage.first.add(p4);
-					}
-				}
-			}
+			int x = temp.getSelectedRow();
+			JPanel p4 = m.go(list.get(x),picture1,picture2);
+			HomePage.screen.get(HomePage.count-1).setVisible(false);
+			HomePage.screen.add(p4);
+			HomePage.count++;
+			HomePage.first.add(p4);
 		}
 
 		@Override

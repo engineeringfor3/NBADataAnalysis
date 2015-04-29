@@ -1,29 +1,36 @@
 package teamui;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
+import mainui.HomePage;
+import matchui.SingleMatch;
 import playerbl.MemberLogic;
 import teamui.teamDataAnalysis.MyTableModel;
 import vo.MatchVO;
 import vo.teamVO;
 
-public class teamAllData {
+public class teamAllData implements MouseListener{
 	JPanel panel = new JPanel();
 	String[] team = {"比赛时间","主队","客队","总比分","小节比分"};
+	ArrayList<MatchVO> list = null;
 	
 	public JPanel go(teamVO vo,Icon i){
 		panel.setLayout(null);
 		panel.setSize(650,610);
-		ArrayList<MatchVO> list = vo.getMatchList();
+		list = vo.getMatchList();
 		String[][] result = new String[list.size()][team.length];
 		
 		for(int j=0;j<result.length;j++){
@@ -65,6 +72,14 @@ public class teamAllData {
 		subZone.setBounds(220, 40, 150, 50);
 		homecourt.setBounds(400,40, 150, 50);
 		launchTime.setBounds(220, 60, 150, 50);
+		
+		for(int k=0;k<4;k++){
+			TableColumn column = table.getColumnModel().getColumn(k);
+			column.setMaxWidth(90);
+			column.setMinWidth(90);
+		}
+		
+		table.addMouseListener(this);
 		
 		panel.add(image);
 		panel.add(jsp);
@@ -115,4 +130,50 @@ public class teamAllData {
 	    
 	    
 	  }
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		JTable temp = (JTable) e.getSource();
+		int x = temp.getSelectedRow();
+		MatchVO vo = list.get(x);
+		SingleMatch s = new SingleMatch();
+		JLabel first = new JLabel(new ImageIcon(vo.getTeam1()+".png"));
+		JLabel second = new JLabel(new ImageIcon(vo.getTeam2()+".png"));
+		if(vo.getTeam1().equals("NOH")){
+			first = new JLabel(new ImageIcon("NOP.png"));
+		}
+		if(vo.getTeam2().equals("NOH")){
+			second = new JLabel(new ImageIcon("NOP.png"));
+		}
+		
+		JPanel p = s.go(vo,first,second);
+		HomePage.screen.get(HomePage.count-1).setVisible(false);
+		HomePage.screen.add(p);
+		HomePage.count++;
+		HomePage.first.add(p);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO 自动生成的方法存根
+		
+	}
 }
