@@ -115,6 +115,7 @@ public class TeamData implements TeamDataService{
 		ArrayList<TeamPO> teamList=new ArrayList<TeamPO>();
 		List<File> files = getFiles("C:\\Users\\Administrator\\Desktop\\new data");
 	    for(File f : files){
+	    	
 	    	int first=0,second=0;
 	    	ArrayList<String[]> dataList=new ArrayList<String[]>();
 	        dataList=getContentByLocalFile(f);
@@ -131,6 +132,9 @@ public class TeamData implements TeamDataService{
 	        	}
 	        }//得到文档的队伍名称以及位置
 	        
+	       
+	       
+	        
 	        boolean contain=false;
 	        for(TeamPO t:teamList){
     			if(t.shorts.equals(dataList.get(first)[0])){
@@ -140,26 +144,30 @@ public class TeamData implements TeamDataService{
     		}
     		if(contain==false){
 				TeamPO p=new TeamPO();
-				String temp=dataList.get(second)[0];
+				String temp=dataList.get(first)[0];
  				p=getTeamLiveData(getTeamName(temp));
 				teamList.add(p);
+				
 			}
-    		contain=false;
+    		
+    		boolean contain1=false;
     		 for(TeamPO t:teamList){
      			if(t.shorts.equals(dataList.get(second)[0])){
-     				contain=true;
+     				contain1=true;
      			}
      			
      		}
-     		if(contain==false){
+     		if(contain1==false){
  				TeamPO p=new TeamPO();
  				String temp=dataList.get(second)[0];
  				p=getTeamLiveData(getTeamName(temp));
  				teamList.add(p);
+ 				
  			}
 	        
 	        	
 	        }
+	   
 	    for(File f : files){
 	    	int first=0,second=0;
 	    	ArrayList<String[]> dataList=new ArrayList<String[]>();
@@ -246,6 +254,8 @@ public class TeamData implements TeamDataService{
 		}
 		return result;
 	}
+	
+	
 	
 	
 

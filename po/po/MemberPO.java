@@ -92,7 +92,11 @@ public class MemberPO {
 	
 	public ArrayList<MatchPO> matchList;
 	public ArrayList<String[]> matchInfo;
+	
+	
 	public MemberPO(){
+		matchInfo=new ArrayList<String[]>();
+		matchList=new ArrayList<MatchPO>();
 		reboundProgressRate=0.0;
 		scoreProgressRate=0.0;
 		assistProgressRate=0.0;

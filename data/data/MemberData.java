@@ -377,6 +377,8 @@ public class MemberData implements MemberDataService{
 		        	for(int j=0;j<memberList.size();j++){
 		        		MemberPO tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
+		        			MatchData md=new MatchData();
+							tem.matchList.add(md.getMatch(f.getName()));
 		        			tem.inMatches+=1;
 		        			tem.shotHits+=Integer.parseInt(t[3]);
 		        			tem.shots+=Integer.parseInt(t[4]);
@@ -494,6 +496,8 @@ public class MemberData implements MemberDataService{
 		        	for(int j=0;j<memberList.size();j++){
 		        		MemberPO tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
+		        			MatchData md=new MatchData();
+							tem.matchList.add(md.getMatch(f.getName()));
 		        			tem.inMatches+=1;
 		        			tem.shotHits+=Integer.parseInt(t[3]);
 		        			tem.shots+=Integer.parseInt(t[4]);
@@ -737,8 +741,15 @@ public class MemberData implements MemberDataService{
 				result.exp=null;
 				result.school=null;
 			}
-			result.matchList=getMemberMatches(result.name);
+			
 			result.team=getTeamName(result.name);
+			ArrayList<MemberPO> memberList=newMemberList();
+			for(MemberPO p:memberList){
+				if(p.name.equals(result.name)){
+					result.matchList=p.matchList;
+					result.inMatches=p.inMatches;
+				}
+			}
 			return result;
 			
 		}
@@ -856,10 +867,25 @@ public class MemberData implements MemberDataService{
 				   }
 				   
 			   }
+			   
+			   String[][] tempList1=t.getPlayers2();
+			   for(int i=0;i<tempList1.length;i++){
+				   if(tempList1[i][0].equals(name)){
+					   String[] temp=new String[21];
+					   for(int j=0;j<18;j++)
+						   temp[j]=tempList1[i][j];
+					   temp[18]=t.getDate();
+					   temp[19]=t.getTeam1()+"-"+t.getTeam2();
+					   temp[20]=t.getScore();
+					   resultList.add(temp);
+				   }
+			   }
 			}
 			return resultList;
 			
 		}
+		
+		
 		
 		
 		
