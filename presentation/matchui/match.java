@@ -132,6 +132,12 @@ public class match implements ActionListener,MouseListener{
 			Icon temp1 = new ImageIcon(name1+".png");
 			Icon temp2 = new ImageIcon(name2+".png");
 			JPanel result;
+			if(name1.equals("NOP")){
+				name1="NOH";
+			}
+			if(name2.equals("NOP")){
+				name2="NOH";
+			}
 			try {
 				result = m.go(name1,name2,temp1,temp2);
 				HomePage.screen.get(HomePage.count-1).setVisible(false);
@@ -142,7 +148,6 @@ public class match implements ActionListener,MouseListener{
 				// TODO 自动生成的 catch 块
 				e1.printStackTrace();
 			}
-			
 		}
 	}
 

@@ -1,14 +1,16 @@
 package playerbl;
 import po.MemberPO;
-
 import po.MatchPO;
 import vo.MemberVO;
 import blservice.PlayerBLService;
 import vo.MatchVO;
 import vo.MemberVO;
 import data.MemberData;
+
 import java.util.*;
 import java.io.*;
+
+import javax.swing.JOptionPane;
 
 public class MemberLogic implements PlayerBLService{
 	public Object[][] poToList(ArrayList<MemberPO> memberList) throws IOException{
@@ -439,6 +441,18 @@ public class MemberLogic implements PlayerBLService{
 			resultList.add(v);
 		}
 		return resultList;
+	}
+
+	public ArrayList<MemberPO> toMemberList() {
+		MemberData md = new MemberData();
+		ArrayList<MemberPO> list = new ArrayList<MemberPO>();
+		try {
+			list = md.toMemberList();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "获取数据错误");
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	
