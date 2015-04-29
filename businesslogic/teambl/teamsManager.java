@@ -447,11 +447,11 @@ public class teamsManager implements TeamBLService{
 		return v;
 	}
 	
-	public static void main(String[] args)throws IOException{
+/*	public static void main(String[] args)throws IOException{
 		teamsManager tm=new teamsManager();
 		teamVO test=tm.getTeamData("Rockets");
 		ArrayList<MatchVO> t=test.getMatchList();
 		System.out.println(t.size());
-	}
+	}*/
 }
 

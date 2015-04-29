@@ -10,13 +10,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import playerui.playerInfo;
+import teambl.teamsManager;
+import vo.teamVO;
 import mainui.HomePage;
 import enumType.NBAteams;
 
 
 public class team implements MouseListener{
 	JPanel p = new JPanel();
-	String[] data = {"队伍","名称","赛区"};
+	String[] data = {"队伍","名称"};
 	JTable table = null;
 	MyTableModel model = null;
 	
@@ -31,7 +33,6 @@ public class team implements MouseListener{
 			ImageIcon temp = new ImageIcon(a.toString()+".png");
 			team[i][0] = temp;
 			team[i][1] = a.toString();
-			team[i][2] = "aa";
 			i++;
 		}
 		
@@ -78,25 +79,22 @@ public class team implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(table.getSelectedColumn() == 1){
-			teamDataAnalysis t = new teamDataAnalysis();
-			String name = (String) table.getValueAt(table.getSelectedRow(),
-					table.getSelectedColumn());
-			ImageIcon image = (ImageIcon) table.getValueAt(table.getSelectedRow(),
-					table.getSelectedColumn()-1);
+		JTable temp = (JTable) e.getSource();
+		int x = temp.getSelectedRow();
+		teamDataAnalysis t = new teamDataAnalysis();
+		String name = (String) table.getValueAt(x,1);
+		ImageIcon image = (ImageIcon) table.getValueAt(x,0);
 			
-			JPanel p4;
-			try {
-				p4 = t.go(name,image);
-				HomePage.screen.get(HomePage.count-1).setVisible(false);
-				HomePage.screen.add(p4);
-				HomePage.count++;
-				HomePage.first.add(p4);
-			} catch (IOException e1) {
-				// TODO 自动生成的 catch 块
-				e1.printStackTrace();
-			}
-			
+		JPanel p4;
+		try {
+			p4 = t.go(name,image);
+			HomePage.screen.get(HomePage.count-1).setVisible(false);
+			HomePage.screen.add(p4);
+			HomePage.count++;
+			HomePage.first.add(p4);
+		} catch (IOException e1) {
+			// TODO 自动生成的 catch 块
+			e1.printStackTrace();
 		}
 	}
 

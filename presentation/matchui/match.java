@@ -131,11 +131,18 @@ public class match implements ActionListener,MouseListener{
 		else{
 			Icon temp1 = new ImageIcon(name1+".png");
 			Icon temp2 = new ImageIcon(name2+".png");
-			JPanel result = m.go(name1,name2,temp1,temp2);
-			HomePage.screen.get(HomePage.count-1).setVisible(false);
-			HomePage.screen.add(result);
-			HomePage.count++;
-			HomePage.first.add(result);
+			JPanel result;
+			try {
+				result = m.go(name1,name2,temp1,temp2);
+				HomePage.screen.get(HomePage.count-1).setVisible(false);
+				HomePage.screen.add(result);
+				HomePage.count++;
+				HomePage.first.add(result);
+			} catch (IOException e1) {
+				// TODO 自动生成的 catch 块
+				e1.printStackTrace();
+			}
+			
 		}
 	}
 
