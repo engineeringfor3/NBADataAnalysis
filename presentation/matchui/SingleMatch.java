@@ -61,6 +61,14 @@ public class SingleMatch implements MouseListener{
 		team2 = new JTable(model2);
 		team1.addMouseListener(this);
 		team2.addMouseListener(this);
+		
+		TableColumn column = team1.getColumnModel().getColumn(0);
+		column.setMaxWidth(130);
+		column.setMinWidth(130);
+		
+		column = team2.getColumnModel().getColumn(0);
+		column.setMaxWidth(130);
+		column.setMinWidth(130);
 			
 		
 		JScrollPane jsp1 = new JScrollPane(team1);

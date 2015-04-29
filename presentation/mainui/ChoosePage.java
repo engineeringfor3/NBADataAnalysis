@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import javax.swing.*;
 
-import org.apache.batik.transcoder.TranscoderException;
-
 import playerui.Member;
 import teamui.team;
 
