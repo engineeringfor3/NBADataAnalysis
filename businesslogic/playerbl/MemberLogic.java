@@ -234,8 +234,12 @@ public class MemberLogic implements PlayerBLService{
 			}
 		}
 		for(int i=0;i<5;i++){
-			String[] hehe=memberList.get(i);
-			
+			String[] hehe=new String[19];
+			String[] temp=memberList.get(i);
+			for(int j=0;j<18;j++)
+				hehe[j]=temp[j];
+			hehe[18]=md.getTeamName(hehe[0]);
+			answer[i]=hehe;
 		}
 		return answer;
 		
@@ -365,17 +369,19 @@ public class MemberLogic implements PlayerBLService{
 				}
 			}
 		}
+	
 		for(int i=0;i<5;i++){
 			MemberPO h=memberList.get(i);
 			MemberPO mp=md.getMemberLiveData(h.name);
-			ArrayList<MatchPO> poList=md.getMemberMatches(mp.name);
+			ArrayList<MatchPO> poList=mp.matchList;
 			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
 			for(MatchPO p:poList){
-				MatchVO m=new MatchVO(p);
-				t.add(m);
+				MatchVO v=new MatchVO(p);
+				t.add(v);
 			}
-			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,t,md.getMatchInfo(mp.name));
+			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,mp.scoreProgressRate,mp.reboundProgressRate,mp.assistProgressRate,t,mp.matchInfo);
 			resultList.add(v);
+			
 		}
 		return resultList;
 	}
@@ -432,13 +438,13 @@ public class MemberLogic implements PlayerBLService{
 		for(int i=0;i<5;i++){
 			MemberPO h=memberList.get(i);
 			MemberPO mp=md.getMemberLiveData(h.name);
-			ArrayList<MatchPO> poList=md.getMemberMatches(mp.name);
+			ArrayList<MatchPO> poList=mp.matchList;
 			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
 			for(MatchPO p:poList){
 				MatchVO v=new MatchVO(p);
 				t.add(v);
 			}
-			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,mp.scoreProgressRate,mp.reboundProgressRate,mp.assistProgressRate,t,md.getMatchInfo(mp.name));
+			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,mp.scoreProgressRate,mp.reboundProgressRate,mp.assistProgressRate,t,mp.matchInfo);
 			resultList.add(v);
 		}
 		return resultList;

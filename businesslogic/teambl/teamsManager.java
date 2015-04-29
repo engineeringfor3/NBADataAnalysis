@@ -447,12 +447,6 @@ public class teamsManager implements TeamBLService{
 		return v;
 	}
 	
-	public static void main(String[] args)throws IOException{
-		teamsManager tm=new teamsManager();
-		ArrayList<teamVO> teamList=tm.getSeasonHotTeam("场均得分");
-		for(teamVO v:teamList){
-			System.out.println(v.getShorts());
-		}
-	}
+	
 }
 

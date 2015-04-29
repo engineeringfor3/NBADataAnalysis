@@ -311,6 +311,43 @@ public class MemberData implements MemberDataService{
 		   
 		}
 		
+		
+		public ArrayList<MatchPO> getMemberMatches(String name)throws IOException{
+			ArrayList<MatchPO> matchList=new ArrayList<MatchPO>();
+			ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
+		    List<File> files = getFiles("C:\\Users\\Administrator\\Desktop\\new data");
+		    for(File f : files){
+		    	int first=0,second=0;
+		    	ArrayList<String[]> dataList=new ArrayList<String[]>();
+		        dataList=getContentByLocalFile(f);
+		        for(int i=0;i<dataList.size();i++){
+		        	if(dataList.get(i).length==1){
+		        		first=i;
+		        		break;
+		        	}
+		        }
+		        for(int i=first;i<dataList.size();i++){
+		        	if(dataList.get(i).length==1){
+		        		second=i;
+		        	}
+		        }//得到文档的队伍名称以及位置
+		        
+		        for(int i=first+1;i<second;i++){
+		        	if(dataList.get(i)[0].equals(name)){
+		        		MatchData md=new MatchData();
+						matchList.add(md.getMatch(f.getName()));
+		        	}
+		        }
+		        
+		        for(int i=second+1;i<dataList.size();i++){
+		        	if(dataList.get(i)[0].equals(name)){
+		        		MatchData md=new MatchData();
+						matchList.add(md.getMatch(f.getName()));
+		        	}
+		        }
+		    }
+			return matchList;
+		}
 	
 		public  ArrayList<MemberPO> newMemberList()throws IOException {
 			ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
@@ -377,8 +414,6 @@ public class MemberData implements MemberDataService{
 		        	for(int j=0;j<memberList.size();j++){
 		        		MemberPO tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
-		        			MatchData md=new MatchData();
-							tem.matchList.add(md.getMatch(f.getName()));
 		        			tem.inMatches+=1;
 		        			tem.shotHits+=Integer.parseInt(t[3]);
 		        			tem.shots+=Integer.parseInt(t[4]);
@@ -496,8 +531,6 @@ public class MemberData implements MemberDataService{
 		        	for(int j=0;j<memberList.size();j++){
 		        		MemberPO tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
-		        			MatchData md=new MatchData();
-							tem.matchList.add(md.getMatch(f.getName()));
 		        			tem.inMatches+=1;
 		        			tem.shotHits+=Integer.parseInt(t[3]);
 		        			tem.shots+=Integer.parseInt(t[4]);
@@ -730,6 +763,7 @@ public class MemberData implements MemberDataService{
 					result.school=a.substring(forward+1,back).trim();
 				}
 			}
+			
 			}
 			else{
 				result.number=null;
@@ -740,26 +774,18 @@ public class MemberData implements MemberDataService{
 				result.age=null;
 				result.exp=null;
 				result.school=null;
+				result.team=null;
 			}
-			
 			result.team=getTeamName(result.name);
-			ArrayList<MemberPO> memberList=newMemberList();
-			for(MemberPO p:memberList){
-				if(p.name.equals(result.name)){
-					result.matchList=p.matchList;
-					result.inMatches=p.inMatches;
-				}
-			}
+			result.matchList=getMemberMatches(result.name);
+			result.matchInfo=getMatchInfo(result.name);
+			
+			
 			return result;
 			
 		}
 		
-		public ArrayList<MatchPO> getMemberMatches(String name)throws IOException{
-			ArrayList<MatchPO> matchList=new ArrayList<MatchPO>();
-			TeamData td=new TeamData();
-			matchList=td.getTeamMatches(getTeamName(name));
-			return matchList;
-		}
+		
 		
 		
 		
@@ -868,28 +894,13 @@ public class MemberData implements MemberDataService{
 				   
 			   }
 			   
-			   String[][] tempList1=t.getPlayers2();
-			   for(int i=0;i<tempList1.length;i++){
-				   if(tempList1[i][0].equals(name)){
-					   String[] temp=new String[21];
-					   for(int j=0;j<18;j++)
-						   temp[j]=tempList1[i][j];
-					   temp[18]=t.getDate();
-					   temp[19]=t.getTeam1()+"-"+t.getTeam2();
-					   temp[20]=t.getScore();
-					   resultList.add(temp);
-				   }
-			   }
+			   
 			}
 			return resultList;
 			
 		}
 		
-		public static void main(String[] args)throws IOException{
-			MemberData md=new MemberData();
-			MemberPO p=md.getMemberLiveData("Aaron Brooks");
-			System.out.println(p.scores);
-		}
+		
 		
 		
 		
