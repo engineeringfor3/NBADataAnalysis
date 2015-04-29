@@ -851,6 +851,21 @@ public class MemberData implements MemberDataService{
 					   temp[20]=t.getScore();
 					   resultList.add(temp);
 				   }
+				   
+			   }
+			   
+			   String[][] tempList2=t.getPlayers2();
+			   for(int i=0;i<tempList2.length;i++){
+				   if(tempList2[i][0].equals(name)){
+					   String[] temp=new String[21];
+					   for(int j=0;j<18;j++)
+						   temp[j]=tempList2[i][j];
+					   temp[18]=t.getDate();
+					   temp[19]=t.getTeam1()+"-"+t.getTeam2();
+					   temp[20]=t.getScore();
+					   resultList.add(temp);
+				   }
+				   
 			   }
 			   
 			   String[][] tempList1=t.getPlayers2();

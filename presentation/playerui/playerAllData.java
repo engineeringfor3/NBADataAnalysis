@@ -6,7 +6,12 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import mainui.HomePage;
@@ -15,20 +20,14 @@ import playerbl.MemberLogic;
 import vo.MatchVO;
 import vo.MemberVO;
 
-public class playerInfo implements MouseListener{
+public class playerAllData implements MouseListener{
 	JTable table = null;
 	String[] info = {"比赛日期","主队","客队","总比分","上场时间","得分"};
 	ArrayList<MatchVO> matchInfo = new ArrayList<MatchVO>();
 	ArrayList<String[]> playerInfo = new ArrayList<String[]>();	
-	JLabel history = null;
-	String firstName = "";
-	MemberVO player = null;
-
-	public JPanel go(String name){
-		MemberLogic m = new MemberLogic();
+	
+	public JPanel go(MemberVO player, String name) {
 		JPanel p = new JPanel();
-		firstName = name;
-		history = new JLabel("<html><u>历史数据</u><html>");
 		p.setLayout(null);
 		p.setSize(650,610);
 		
@@ -39,14 +38,6 @@ public class playerInfo implements MouseListener{
 		
 		l.setBounds(450,0,200,400);
 		l2.setBounds(40,40,150,200);
-	
-		try {
-			player = m.getPlayerData(name);
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "获取信息错误");
-			e.printStackTrace();
-		}
-		
 		
 		JLabel firstName = new JLabel("姓名:  "+player.getName());
 		JLabel number = new JLabel("球衣号码:   "+player.getNumber());
@@ -58,16 +49,13 @@ public class playerInfo implements MouseListener{
 		JLabel exp = new JLabel("球龄:    "+player.getExp());
 		JLabel school = new JLabel("毕业学校:   "+player.getSchool());
 		JLabel team = new JLabel("队伍:    "+player.getTeam());
-
-		
-		history.setForeground(Color.red);
-		history.addMouseListener(this);
 		
 		matchInfo = player.getMatchList();
 		playerInfo = player.getMatchInfo();
-		String[][] result = new String[5][info.length];
-	
-		for(int j=0;j<5;j++){
+		System.out.println(matchInfo.size()+"  "+playerInfo.size());
+		String[][] result = new String[matchInfo.size()][info.length];
+		
+		for(int j=0;j<matchInfo.size();j++){
 			result[j][0] = matchInfo.get(j).getDate();
 			result[j][1] = matchInfo.get(j).getTeam1();
 			result[j][2] = matchInfo.get(j).getTeam2();
@@ -92,7 +80,6 @@ public class playerInfo implements MouseListener{
 		exp.setBounds(390, 110, 150, 50);
 		school.setBounds(230,130,150,50);
 		team.setBounds(390, 130, 150, 50);
-		history.setBounds(230, 150, 150, 50);
 		js.setBounds(40, 260, 400, 200);
 		
 		p.add(l);
@@ -107,7 +94,6 @@ public class playerInfo implements MouseListener{
 		p.add(exp);
 		p.add(school);
 		p.add(team);
-		p.add(history);
 		p.add(js);
 		
 		return p;
@@ -115,34 +101,8 @@ public class playerInfo implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(e.getSource() == history){
-			playerAllData p = new playerAllData();
-			JPanel temp = p.go(player,firstName);
-			HomePage.screen.get(HomePage.count-1).setVisible(false);
-			HomePage.screen.add(temp);
-			HomePage.count++;
-			HomePage.first.add(temp);
-		}
-		else if(e.getSource() == table){
-			JTable temp = (JTable) e.getSource();
-			SingleMatch m = new SingleMatch();
-			int x = temp.getSelectedRow();
-			MatchVO vo = matchInfo.get(x);
-			JLabel first = new JLabel(new ImageIcon(vo.getTeam1()+".png"));
-			JLabel second = new JLabel(new ImageIcon(vo.getTeam2()+".png"));
-			if(vo.getTeam1().equals("NOH")){
-				first = new JLabel(new ImageIcon("NOP.png"));
-			}
-			if(vo.getTeam2().equals("NOH")){
-				second = new JLabel(new ImageIcon("NOP.png"));
-			}
-			
-			JPanel p = m.go(vo,first,second);
-			HomePage.screen.get(HomePage.count-1).setVisible(false);
-			HomePage.screen.add(p);
-			HomePage.count++;
-			HomePage.first.add(p);
-		}
+		// TODO 自动生成的方法存根
+		
 	}
 
 	@Override
@@ -167,5 +127,7 @@ public class playerInfo implements MouseListener{
 	public void mouseExited(MouseEvent e) {
 		// TODO 自动生成的方法存根
 		
-	}
+	}	
+
+	
 }

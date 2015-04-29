@@ -18,6 +18,7 @@ import org.jvnet.substance.skin.*;
 import org.jvnet.substance.watermark.SubstanceImageWatermark;
 
 import playerui.Member;
+import playerui.TodayHotPlayer;
 import teamui.team;
 
 public class HomePage implements ListSelectionListener{
@@ -138,19 +139,14 @@ public class HomePage implements ListSelectionListener{
 				e1.printStackTrace();
 			}
 		}
-		/*else if(nodeName.equals("当天热点球员")){
+		else if(list.getSelectedIndex() == 3){
 			TodayHotPlayer h = new TodayHotPlayer();
 			JPanel result;
-			try{
-				result = h.go();
-				screen.get(count-1).setVisible(false);
-				screen.add(result);
-				count++;
-				first.add(result);
-			} catch (IOException e1) {
-				// TODO 自动生成的 catch 块
-				e1.printStackTrace();
-			}
-		}*/
+			result = h.go();
+			screen.get(count-1).setVisible(false);
+			screen.add(result);
+			count++;
+			first.add(result);
+		}
 	}
 }
