@@ -147,7 +147,7 @@ public class MemberLogic implements PlayerBLService{
 			MatchVO v=new MatchVO(p);
 			t.add(v);
 		}
-		MemberVO result=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,t);
+		MemberVO result=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,t,md.getMatchInfo(mp.name));
 		return result;
 	}
 	
