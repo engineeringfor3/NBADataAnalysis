@@ -9,6 +9,7 @@ public class SinglePlayer {
 		
 		ImageIcon icon = new ImageIcon(".\\players\\portrait\\"+s[0]+".png");
 		JLabel l = new JLabel(icon);
+		JLabel name = new JLabel(s[0]);
 		
 		JLabel k = new JLabel("投篮命中数:   "+s[3]);
 		JLabel k2 = new JLabel("投篮出手数:   "+s[4]);
@@ -43,6 +44,7 @@ public class SinglePlayer {
 		k13.setBounds(160, 0, 100, 490);
 		k14.setBounds(160, 0, 100, 530);
 		k15.setBounds(160,0,100,570);
+		name.setBounds(40, 210, 200, 50);
 		
 		w.add(l);
 		w.add(k);
@@ -60,6 +62,7 @@ public class SinglePlayer {
 		w.add(k13);
 		w.add(k14);
 		w.add(k15);
+		w.add(name);
 		
 		w.setSize(300,300);
 		
