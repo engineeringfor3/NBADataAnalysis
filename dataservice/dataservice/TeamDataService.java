@@ -11,7 +11,7 @@ public interface TeamDataService {
 	public ArrayList<TeamPO> getTeamList()throws IOException;
 	public TeamPO getTeamLiveData(String name)throws IOException;
 	public ArrayList<MatchPO> getTeamMatches(String name)throws IOException;
-	public ArrayList<MatchPO> getLatestTeamMatches(String name)throws IOException;
+	
 
 }
 
