@@ -178,7 +178,6 @@ public class Member {
 				playerInfo p = new playerInfo();
 				String name = (String) table.getValueAt(table.getSelectedRow(),
 						table.getSelectedColumn());
-				
 				JPanel p4 = p.go(name);
 				HomePage.screen.get(HomePage.count-1).setVisible(false);
 				HomePage.screen.add(p4);
