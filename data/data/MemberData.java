@@ -314,8 +314,7 @@ public class MemberData implements MemberDataService{
 		
 		public ArrayList<MatchPO> getMemberMatches(String name)throws IOException{
 			ArrayList<MatchPO> matchList=new ArrayList<MatchPO>();
-			ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
-		    List<File> files = getFiles("C:\\Users\\Administrator\\Desktop\\new data");
+		    List<File> files = getFiles("newData");
 		    for(File f : files){
 		    	int first=0,second=0;
 		    	ArrayList<String[]> dataList=new ArrayList<String[]>();
@@ -351,7 +350,7 @@ public class MemberData implements MemberDataService{
 	
 		public  ArrayList<MemberPO> newMemberList()throws IOException {
 			ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
-		    List<File> files = getFiles("C:\\Users\\Administrator\\Desktop\\new data");
+		    List<File> files = getFiles("newData");
 		    for(File f : files){
 		    	int first=0,second=0;
 		    	ArrayList<String[]> dataList=new ArrayList<String[]>();
@@ -411,6 +410,15 @@ public class MemberData implements MemberDataService{
 		        }//得到文档的队伍名称以及位置
 		        for(int i=first+1;i<second;i++){
 		        	String t[]=dataList.get(i);
+		        	if(t[17].equals("null")){
+		        		int memberAll=0;
+		        		for(int j=first+1;j<second;j++){
+		        			if(j!=i){
+		        			memberAll+=Integer.parseInt(dataList.get(j)[17]);
+		        			}
+		        		}
+		        		t[17]=String.valueOf(Integer.parseInt(dataList.get(0)[2].split("-")[0])-memberAll);
+		        	}
 		        	for(int j=0;j<memberList.size();j++){
 		        		MemberPO tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
@@ -528,6 +536,15 @@ public class MemberData implements MemberDataService{
 		        }
 		        for(int i=second+1;i<dataList.size();i++){
 		        	String t[]=dataList.get(i);
+		        	if(t[17].equals("null")){
+		        		int memberAll=0;
+		        		for(int j=second+1;j<dataList.size();j++){
+		        			if(j!=i){
+		        			memberAll+=Integer.parseInt(dataList.get(j)[17]);
+		        			}
+		        		}
+		        		t[17]=String.valueOf(Integer.parseInt(dataList.get(0)[2].split("-")[1])-memberAll);
+		        	}
 		        	for(int j=0;j<memberList.size();j++){
 		        		MemberPO tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
@@ -656,7 +673,12 @@ public class MemberData implements MemberDataService{
 					break;
 				}
 			}
+			ArrayList<MemberPO> memberList=newMemberList();
 			MemberPO result=new MemberPO();
+			for(MemberPO p:memberList){
+				if(p.name.equals(name))
+					result=p;
+			}
 			result.name=name;
 			if(hasIt==true){
 			String location="players//info//"+name;
@@ -781,6 +803,8 @@ public class MemberData implements MemberDataService{
 			result.matchInfo=getMatchInfo(result.name);
 			
 			
+			
+			
 			return result;
 			
 		}
@@ -789,16 +813,11 @@ public class MemberData implements MemberDataService{
 		
 		
 		
-		public ArrayList<MatchPO> getLatestMemberMatches(String name)throws IOException{
-			ArrayList<MatchPO> matchList=new ArrayList<MatchPO>();
-			TeamData td=new TeamData();
-			matchList=td.getLatestTeamMatches(getTeamName(name));
-			return matchList;
-		}
+		
 		
 		public String getTeamName(String name)throws IOException{
 			String result=null;
-			List<File> files = getFiles("C:\\Users\\Administrator\\Desktop\\new data");
+			List<File> files = getFiles("newData");
 		    for(File f : files){
 		    	int first=0,second=0;
 		    	String firstTeam=null,secondTeam=null;
@@ -841,10 +860,10 @@ public class MemberData implements MemberDataService{
 			MatchData md=new MatchData();
 			ArrayList<String[]> memberList=new ArrayList<String[]>();
 			String time=null;
-			List<File> files = getFiles("C:\\Users\\Administrator\\Desktop\\new data");
+			List<File> files = getFiles("newData");
 		    for(File f : files){
 		    	String []temp=f.getName().split("_");
-		    	time=temp[1];
+		    	time="_"+temp[1];
 		    }
 		    for(File f:files){
 		    	if(f.getName().contains(time)){
@@ -903,7 +922,11 @@ public class MemberData implements MemberDataService{
 		
 		
 		
-		
+		public static void main(String [] args)throws IOException{
+			MemberData md=new MemberData();
+			MemberPO p=md.getMemberLiveData("Kyle Korver");
+			System.out.println(p.name+" "+p.scores+" "+p.inMatches+" "+p.averageScores+" "+p.birth);
+		}
 		
 		
 		

@@ -2,17 +2,33 @@ package data;
 
 import java.io.BufferedReader;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import po.MatchPO;
 import dataservice.MatchDataService;
 
 public class MatchData implements MatchDataService{
+	
+	public static List<File> getFiles(String path)throws IOException{
+	    File root = new File(path);
+	    List<File> files = new ArrayList<File>();
+	    if(!root.isDirectory()){
+	        files.add(root);
+	    }else{
+	        File[] subFiles = root.listFiles();
+	        for(File f : subFiles){
+	            files.addAll(getFiles(f.getAbsolutePath()));
+	        }    
+	    }
+	    return files;
+	}//读取一个文件夹中的所有文件名
 	public MatchPO getMatch(String name)throws IOException{
 		MatchPO result=new MatchPO();
-		String path="C:\\Users\\Administrator\\Desktop\\new data\\"+name;
+		String path="newData\\"+name;
 		int first=0,second=0,count=0;
     	ArrayList<String[]> dataList=new ArrayList<String[]>();
     	BufferedReader br=new BufferedReader(new FileReader(path));
@@ -55,6 +71,16 @@ public class MatchData implements MatchDataService{
         
 		return result;
 	}
+	
+	public ArrayList<MatchPO> getMatchList()throws IOException{
+		ArrayList<MatchPO> matchList=new ArrayList<MatchPO>();
+		List<File> files = getFiles("newData");
+		for(File f:files){
+			matchList.add(getMatch(f.getName()));
+		}
+		return matchList;
+	}
+	
 	
 	
 	

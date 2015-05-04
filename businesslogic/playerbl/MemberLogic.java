@@ -149,7 +149,7 @@ public class MemberLogic implements PlayerBLService{
 			MatchVO v=new MatchVO(p);
 			t.add(v);
 		}
-		MemberVO result=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,t,md.getMatchInfo(mp.name));
+		MemberVO result=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,t,mp.matchInfo);
 		return result;
 	}
 	
@@ -461,7 +461,6 @@ public class MemberLogic implements PlayerBLService{
 		}
 		return list;
 	}
-	
 	
 	
 	
