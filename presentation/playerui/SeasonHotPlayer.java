@@ -6,13 +6,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JWindow;
+
 import playerbl.MemberLogic;
 
-public class TodayHotPlayer implements ActionListener,MouseListener{
+public class SeasonHotPlayer implements ActionListener, MouseListener {
 	MemberLogic m = new MemberLogic();
 	JPanel p = new JPanel();
-	String[] choose = {"得分","篮板","助攻","盖帽","抢断"};
+	String[] choose = {"场均得分","场均篮板","场均助攻","场均盖帽","场均抢断","三分命中率","投篮命中率","罚球命中率"};
 	JTable table = null;
 	MyTableModel model = null;
 	JComboBox choice = null;
@@ -177,6 +184,3 @@ public class TodayHotPlayer implements ActionListener,MouseListener{
 	
 	
 }
-
-
-
