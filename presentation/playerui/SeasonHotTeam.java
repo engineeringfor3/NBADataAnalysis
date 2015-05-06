@@ -6,28 +6,37 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JWindow;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
-import mainui.HomePage;
 import playerbl.MemberLogic;
+import playerui.playerInfo;
+import mainui.HomePage;
+import teambl.teamsManager;
+import teamui.teamDataAnalysis;
 import vo.MemberVO;
+import vo.teamVO;
+import enumType.NBAteams;
 
-public class SeasonHotPlayer implements ActionListener, MouseListener {
-	MemberLogic m = new MemberLogic();
+public class SeasonHotTeam implements ActionListener, MouseListener {
+	teamsManager m = new teamsManager();
 	JPanel p = new JPanel();
 	String[] choose = {"场均得分","场均篮板","场均助攻","场均盖帽","场均抢断","三分命中率","投篮命中率","罚球命中率"};
 	JTable table = null;
 	MyTableModel model = null;
 	JComboBox choice = null;
 	String[][] result = new String[5][choose.length];
-	ArrayList<MemberVO> player = null;
+	ArrayList<teamVO> player = null;
 
 	public JPanel go() {
 		p.setLayout(null);
@@ -40,19 +49,19 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 		b.addActionListener(this);
 		
 		try {
-			player = m.getSeasonHotPlayer("场均得分");
+			player = m.getSeasonHotTeam("场均得分");
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "获取信息错误");
 			e.printStackTrace();
 		}
 		
-		String[] columnNames = { "球员名称", "所属球队","球员位置"};
+		String[] columnNames = { "球队名称", "所属联盟","所属子联盟"};
 		
-		String[][] result = new String[5][3];
+		String[][] result = new String[5][columnNames.length];
 		for(int i=0;i<player.size();i++){
 			result[i][0] = player.get(i).getName();
-			result[i][1] = player.get(i).getTeam();
-			result[i][2] = player.get(i).getPosition();
+			result[i][1] = player.get(i).getZone();
+			result[i][2] = player.get(i).getSubZone();
 		}
 		
 		model = new MyTableModel(result,columnNames);  
@@ -76,7 +85,7 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 	public void actionPerformed(ActionEvent e) {
 		String ch = (String) choice.getSelectedItem();
 		try {
-			player = m.getSeasonHotPlayer(ch);
+			player = m.getSeasonHotTeam(ch);
 		} catch (IOException e1) {
 			JOptionPane.showMessageDialog(null, "获取数据错误");
 			e1.printStackTrace();
@@ -89,93 +98,92 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 
 	private void getData(String ch) {
 		if(ch.equals("场均得分")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置"};
+			String[] columnNames = { "球队名称", "所属联盟","所属子联盟"};
 			
-			String[][] result = new String[5][3];
+			String[][] result = new String[5][columnNames.length];
 			for(int i=0;i<player.size();i++){
 				result[i][0] = player.get(i).getName();
-				result[i][1] = player.get(i).getTeam();
-				result[i][2] = player.get(i).getPosition();
+				result[i][1] = player.get(i).getZone();
+				result[i][2] = player.get(i).getSubZone();
 			}
 			
 			model.setData(result, columnNames);
-			model.getColumnName(3);
 		}
 		else if(ch.equals("场均篮板")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置"};
 			
-			String[][] result = new String[5][3];
+			String[] columnNames = { "球队名称", "所属联盟","所属子联盟"};
+			
+			String[][] result = new String[5][columnNames.length];
 			for(int i=0;i<player.size();i++){
 				result[i][0] = player.get(i).getName();
-				result[i][1] = player.get(i).getTeam();
-				result[i][2] = player.get(i).getPosition();
+				result[i][1] = player.get(i).getZone();
+				result[i][2] = player.get(i).getSubZone();
 			}
 			model.setData(result, columnNames);
-			model.getColumnName(3);
 		}
 		else if(ch.equals("场均助攻")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置"};
+			String[] columnNames = { "球队名称", "所属联盟","所属子联盟"};
 			
-			String[][] result = new String[5][3];
+			String[][] result = new String[5][columnNames.length];
 			for(int i=0;i<player.size();i++){
 				result[i][0] = player.get(i).getName();
-				result[i][1] = player.get(i).getTeam();
-				result[i][2] = player.get(i).getPosition();
+				result[i][1] = player.get(i).getZone();
+				result[i][2] = player.get(i).getSubZone();
 			}
 			model.setData(result, columnNames);  
 		}
 		else if(ch.equals("场均盖帽")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置"};
+			String[] columnNames = { "球队名称", "所属联盟","所属子联盟"};
 			
-			String[][] result = new String[5][3];
+			String[][] result = new String[5][columnNames.length];
 			for(int i=0;i<player.size();i++){
 				result[i][0] = player.get(i).getName();
-				result[i][1] = player.get(i).getTeam();
-				result[i][2] = player.get(i).getPosition();
+				result[i][1] = player.get(i).getZone();
+				result[i][2] = player.get(i).getSubZone();
 			}
 			model.setData(result,columnNames); 
 		}
 		else if(ch.equals("场均抢断")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置"};
+			String[] columnNames = { "球队名称", "所属联盟","所属子联盟"};
 			
-			String[][] result = new String[5][3];
+			String[][] result = new String[5][columnNames.length];
 			for(int i=0;i<player.size();i++){
 				result[i][0] = player.get(i).getName();
-				result[i][1] = player.get(i).getTeam();
-				result[i][2] = player.get(i).getPosition();
+				result[i][1] = player.get(i).getZone();
+				result[i][2] = player.get(i).getSubZone();
 			}
 			model.setData(result, columnNames);  
 		}
 		else if(ch.equals("三分命中率")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置"};
+			String[] columnNames = { "球队名称", "所属联盟","所属子联盟"};
 			
-			String[][] result = new String[5][3];
+			String[][] result = new String[5][columnNames.length];
 			for(int i=0;i<player.size();i++){
 				result[i][0] = player.get(i).getName();
-				result[i][1] = player.get(i).getTeam();
-				result[i][2] = player.get(i).getPosition();
+				result[i][1] = player.get(i).getZone();
+				result[i][2] = player.get(i).getSubZone();
 			}
 			model.setData(result, columnNames);  
 		}
 		else if(ch.equals("投篮命中率")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置"};
+			String[] columnNames = { "球队名称", "所属联盟","所属子联盟"};
 			
-			String[][] result = new String[5][3];
+			String[][] result = new String[5][columnNames.length];
 			for(int i=0;i<player.size();i++){
 				result[i][0] = player.get(i).getName();
-				result[i][1] = player.get(i).getTeam();
-				result[i][2] = player.get(i).getPosition();
+				result[i][1] = player.get(i).getZone();
+				result[i][2] = player.get(i).getSubZone();
 			}
 			model.setData(result, columnNames);  
 		}
 		else if(ch.equals("罚球命中率")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置"};
+			String[] columnNames = { "球队名称", "所属联盟","所属子联盟"};
 			
-			String[][] result = new String[5][3];
+			String[][] result = new String[5][columnNames.length];
 			for(int i=0;i<player.size();i++){
 				result[i][0] = player.get(i).getName();
-				result[i][1] = player.get(i).getTeam();
-				result[i][2] = player.get(i).getPosition();
+				result[i][1] = player.get(i).getZone();
+				result[i][2] = player.get(i).getSubZone();
 			}
 			model.setData(result, columnNames);  
 		}
@@ -183,15 +191,22 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(table.getSelectedColumn() == 0){
-			playerInfo p = new playerInfo();
-			String name = (String) table.getValueAt(table.getSelectedRow(),
-					table.getSelectedColumn());
-			JPanel p4 = p.go(name);
+		JTable temp = (JTable) e.getSource();
+		int x = temp.getSelectedRow();
+		teamDataAnalysis t = new teamDataAnalysis();
+		String name = player.get(x).getShorts();
+		ImageIcon image = new ImageIcon(player.get(x).getShorts()+".png");
+			
+		JPanel p4;
+		try {
+			p4 = t.go(name,image);
 			HomePage.screen.get(HomePage.count-1).setVisible(false);
 			HomePage.screen.add(p4);
 			HomePage.count++;
 			HomePage.first.add(p4);
+		} catch (IOException e1) {
+			// TODO 自动生成的 catch 块
+			e1.printStackTrace();
 		}
 	}
 
@@ -212,6 +227,5 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 		// TODO 自动生成的方法存根
 		
 	}
-	
 	
 }

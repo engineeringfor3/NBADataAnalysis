@@ -11,7 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
@@ -42,11 +44,8 @@ public class teamAllData implements MouseListener{
 		}
 		
 		MyTableModel tableModel = new MyTableModel(result,team);
-		TableRowSorter<MyTableModel> sorter = new TableRowSorter<MyTableModel>(tableModel);
 		JTable table = new JTable(tableModel);
 		JScrollPane jsp = new JScrollPane(table);
-		table.setAutoCreateRowSorter(true); 
-		table.setRowSorter(sorter); 
 		
 		JLabel image = new JLabel(i);
 		image.setBackground(Color.DARK_GRAY);
@@ -71,13 +70,18 @@ public class teamAllData implements MouseListener{
 		zone.setBounds(400, 20,150,50);
 		subZone.setBounds(220, 40, 150, 50);
 		homecourt.setBounds(400,40, 150, 50);
-		launchTime.setBounds(220, 60, 150, 50);
+		launchTime.setBounds(220, 60, 500, 50);
 		
 		for(int k=0;k<4;k++){
 			TableColumn column = table.getColumnModel().getColumn(k);
 			column.setMaxWidth(90);
 			column.setMinWidth(90);
 		}
+		
+		DefaultTableCellRenderer cellrender = new DefaultTableCellRenderer();
+		cellrender.setHorizontalAlignment(JTextField.CENTER);
+		cellrender.setOpaque(false);
+		table.setDefaultRenderer(String.class, cellrender);
 		
 		table.addMouseListener(this);
 		
@@ -94,10 +98,7 @@ public class teamAllData implements MouseListener{
 	}
 	
 	class MyTableModel extends AbstractTableModel  { 
-		MemberLogic ml=new MemberLogic();
 	    private String[] columnNames ; 
-	    
-	    
 	    private Object[][] data ;  
 	    
 	    public MyTableModel(Object[][] data,String[] columnNames) {
@@ -137,8 +138,8 @@ public class teamAllData implements MouseListener{
 		int x = temp.getSelectedRow();
 		MatchVO vo = list.get(x);
 		SingleMatch s = new SingleMatch();
-		JLabel first = new JLabel(new ImageIcon(vo.getTeam1()+".png"));
-		JLabel second = new JLabel(new ImageIcon(vo.getTeam2()+".png"));
+		JLabel first = new JLabel(new ImageIcon("./picture/"+vo.getTeam1()+".png"));
+		JLabel second = new JLabel(new ImageIcon("./picture/"+vo.getTeam2()+".png"));
 		if(vo.getTeam1().equals("NOH")){
 			first = new JLabel(new ImageIcon("NOP.png"));
 		}

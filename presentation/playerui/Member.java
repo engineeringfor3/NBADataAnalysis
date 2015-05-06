@@ -176,8 +176,7 @@ public class Member {
 		public void mouseClicked(MouseEvent e) {
 			if(table.getSelectedColumn() == 0){
 				playerInfo p = new playerInfo();
-				String name = (String) table.getValueAt(table.getSelectedRow(),
-						table.getSelectedColumn());
+				String name = (String) table.getValueAt(table.getSelectedRow(),0);
 				JPanel p4 = p.go(name);
 				HomePage.screen.get(HomePage.count-1).setVisible(false);
 				HomePage.screen.add(p4);
@@ -216,10 +215,7 @@ public class Member {
 }
 
 class MyTableModel extends AbstractTableModel  { 
-	MemberLogic ml=new MemberLogic();
     private String[] columnNames ; 
-    
-    
     private Object[][] data ;  
     
     public MyTableModel(Object[][] data,String[] columnNames) {

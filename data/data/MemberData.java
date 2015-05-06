@@ -2,7 +2,6 @@ package data;
 
 import dataservice.*;
 import po.MatchPO;
-
 import po.MemberPO;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -39,9 +38,13 @@ public class MemberData implements MemberDataService{
 			return stringList;
 	    }  //读取文本文件中的内容
 		
-		public static String passPosition(File file)throws IOException{
+		public static String passPosition(String name)throws IOException{
+			
+			
 			String result=null;
-			BufferedReader br=new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));  
+			String location="players//info//"+name;
+			try{
+			BufferedReader br=new BufferedReader(new InputStreamReader(new FileInputStream(location),"UTF-8"));
 			String a;
 			int n=0;
 			int forward=0,back=0;
@@ -60,7 +63,12 @@ public class MemberData implements MemberDataService{
 					result=a.substring(forward+1,back).trim();
 				}
 			}
+			}catch(FileNotFoundException e){
+				return null;
+			}
+			
 			return result;
+			
 		}//从文件中读取球员位置
 		
 		public static int minuteToSecond(String temp){
@@ -72,14 +80,53 @@ public class MemberData implements MemberDataService{
 		
 		public  ArrayList<MemberPO> toMemberList()throws IOException {
 			ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
-		    List<File> files = getFiles("players\\info");
+		    List<File> files = getFiles("newData");
 		    for(File f : files){
-		        MemberPO temp=new MemberPO();
-		        temp.name=f.getName();
-		        temp.position=passPosition(f);
-		        memberList.add(temp);
+		    	int first=0,second=0;
+		    	ArrayList<String[]> dataList=new ArrayList<String[]>();
+		        dataList=getContentByLocalFile(f);
+		        for(int i=0;i<dataList.size();i++){
+		        	if(dataList.get(i).length==1){
+		        		first=i;
+		        		break;
+		        	}
+		        }
+		        for(int i=first;i<dataList.size();i++){
+		        	if(dataList.get(i).length==1){
+		        		second=i;
+		        	}
+		        }//得到文档的队伍名称以及位置
+		        for(int i=first+1;i<second;i++){
+		        	String temp=dataList.get(i)[0];
+		        	MemberPO te=new MemberPO();
+		        	te.name=temp;
+		        	te=getMemberLiveData(te.name);
+		        	boolean contain=false;
+		        	for(MemberPO a:memberList){
+		        		if(a.name.equals(temp))
+		        			contain=true;
+		        	}
+		        	if(contain==false){
+		        		memberList.add(te);
+		        	}
+		        }
+		        for(int i=second+1;i<dataList.size();i++){
+		        	String temp=dataList.get(i)[0];
+		        	MemberPO te=new MemberPO();
+		        	te.name=temp;
+		        	te=getMemberLiveData(te.name);
+
+		        	boolean contain=false;
+		        	for(MemberPO a:memberList){
+		        		if(a.name.equals(temp))
+		        			contain=true;
+		        	}
+		        	if(contain==false){
+		        		memberList.add(te);
+		        	}
+		        }
 		    }
-		    files = getFiles("matches");
+		  
 		    for(File f : files){
 		    	int first=0,second=0;
 		    	String firstTeam=null,secondTeam=null;
@@ -152,13 +199,29 @@ public class MemberData implements MemberDataService{
 		        		if(t[2].equals("None")){
 		        			t[2]="0:0";
 		        		}
+		        		if(t[2].equals("null")){
+		        			t[2]="0:0";
+		        		}
+		        		if(t[17].equals("null")){
+			        		int memberAll=0;
+			        		for(int j=first+1;j<second;j++){
+			        			if(j!=i){
+			        			memberAll+=Integer.parseInt(dataList.get(j)[17]);
+			        			}
+			        		}
+			        		t[17]=String.valueOf(Integer.parseInt(dataList.get(0)[2].split("-")[0])-memberAll);
+			        	}
 		        	}
+		        	
 		        	for(int j=0;j<memberList.size();j++){
 		        		MemberPO tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
 		        			if(t[1].equals("F")||t[1].equals("G")||t[1].equals("C")){
 		        				tem.firstMatches+=1;
+		        				if(tem.position==null)
+		        				tem.position=t[1];
 		        			}
+		        			
 		        			tem.inMatches+=1;
 		        			tem.onTime+=minuteToSecond(t[2]);
 		        			tem.shotHits+=Integer.parseInt(t[3]);
@@ -218,13 +281,30 @@ public class MemberData implements MemberDataService{
 		        		if(t[2].equals("None")){
 		        			t[2]="0:0";
 		        		}
+		        		if(t[2].equals("null")){
+		        			t[2]="0:0";
+		        		}
+		        		if(t[17].equals("null")){
+			        		int memberAll=0;
+			        		for(int j=second+1;j<dataList.size();j++){
+			        			if(j!=i){
+			        			memberAll+=Integer.parseInt(dataList.get(j)[17]);
+			        			}
+			        		}
+			        		t[17]=String.valueOf(Integer.parseInt(dataList.get(0)[2].split("-")[1])-memberAll);
+			        	}
+		        		
 		        	}
+		        	
 		        	for(int j=0;j<memberList.size();j++){
 		        		MemberPO tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
 		        			if(t[1].equals("F")||t[1].equals("G")||t[1].equals("C")){
 		        				tem.firstMatches+=1;
+		        				if(tem.position==null)
+		        				tem.position=t[1];
 		        			}
+		        			
 		        			tem.inMatches+=1;
 		        			tem.onTime+=minuteToSecond(t[2]);
 		        			tem.shotHits+=Integer.parseInt(t[3]);
@@ -306,6 +386,7 @@ public class MemberData implements MemberDataService{
 		    	memberList.add(i,temp);
 		    	
 		    }
+		  
 		   
 		    return memberList;
 		   
@@ -422,6 +503,7 @@ public class MemberData implements MemberDataService{
 		        	for(int j=0;j<memberList.size();j++){
 		        		MemberPO tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
+		        			
 		        			tem.inMatches+=1;
 		        			tem.shotHits+=Integer.parseInt(t[3]);
 		        			tem.shots+=Integer.parseInt(t[4]);
@@ -664,24 +746,13 @@ public class MemberData implements MemberDataService{
 		    return memberList;
 		}
 		public MemberPO getMemberLiveData(String name)throws IOException{
-			List<File> files = getFiles("players//info//");
-			boolean hasIt=false;
-			for(File f:files){
-				String n=f.getName();
-				if(n.equals(name)){
-					hasIt=true;
-					break;
-				}
-			}
-			ArrayList<MemberPO> memberList=newMemberList();
+			
 			MemberPO result=new MemberPO();
-			for(MemberPO p:memberList){
-				if(p.name.equals(name))
-					result=p;
-			}
+			
 			result.name=name;
-			if(hasIt==true){
+			
 			String location="players//info//"+name;
+			try{
 			BufferedReader br=new BufferedReader(new InputStreamReader(new FileInputStream(location),"UTF-8"));  
 			String a;
 			int n=0;
@@ -786,8 +857,9 @@ public class MemberData implements MemberDataService{
 				}
 			}
 			
+			
 			}
-			else{
+			catch(FileNotFoundException e){
 				result.number=null;
 				result.position=null;
 				result.height=null;
@@ -796,11 +868,10 @@ public class MemberData implements MemberDataService{
 				result.age=null;
 				result.exp=null;
 				result.school=null;
-				result.team=null;
+				
 			}
-			result.team=getTeamName(result.name);
-			result.matchList=getMemberMatches(result.name);
-			result.matchInfo=getMatchInfo(result.name);
+			
+			
 			
 			
 			
@@ -922,11 +993,7 @@ public class MemberData implements MemberDataService{
 		
 		
 		
-		public static void main(String [] args)throws IOException{
-			MemberData md=new MemberData();
-			MemberPO p=md.getMemberLiveData("Kyle Korver");
-			System.out.println(p.name+" "+p.scores+" "+p.inMatches+" "+p.averageScores+" "+p.birth);
-		}
+		
 		
 		
 		

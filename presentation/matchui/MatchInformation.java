@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -51,7 +52,7 @@ public class MatchInformation {
 		
 		picture1 = new JLabel(image1);
 		picture2 = new JLabel(image2);
-		JLabel vs = new JLabel(new ImageIcon("sv.png"));
+		JLabel vs = new JLabel(new ImageIcon("./picture/sv.png"));
 		
 		picture1.setBounds(100,30,100,100);
 		picture2.setBounds(420,30,100,100);

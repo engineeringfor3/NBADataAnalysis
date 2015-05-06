@@ -18,6 +18,9 @@ import org.jvnet.substance.skin.*;
 import org.jvnet.substance.watermark.SubstanceImageWatermark;
 
 import playerui.Member;
+import playerui.ProgressPlayer;
+import playerui.SeasonHotPlayer;
+import playerui.SeasonHotTeam;
 import playerui.TodayHotPlayer;
 import teamui.team;
 
@@ -29,12 +32,12 @@ public class HomePage implements ListSelectionListener{
 	public static int count = 0;          //获得相应的哪一层
 	
 	JList list = null;
-	DefaultListModel model = null;
+	myModel model = null;
 	
 	public static ArrayList<JPanel> screen = new ArrayList<JPanel>();     //存放所有的JPanel
 	JPanel buttonP = new JPanel();
-	JButton back = new JButton("返回");
-	JButton front = new JButton("前进");
+	JButton back = new JButton("返回");         //返回上一界面
+	JButton front = new JButton("前进");        //返回后一界面
 		
 	public HomePage(){
 		f.setLayout(new BorderLayout());
@@ -52,7 +55,7 @@ public class HomePage implements ListSelectionListener{
 		
 		initList();
 		
-		buttonP.add(new JLabel(new ImageIcon("NBA.png")));	
+		buttonP.add(new JLabel(new ImageIcon("./picture/NBA.png")));	
 		buttonP.add(new JLabel("                                                                                    "));	
 		buttonP.add(back);
 		buttonP.add(front);
@@ -93,7 +96,7 @@ public class HomePage implements ListSelectionListener{
 	    SwingUtilities.invokeLater(new Runnable() {  
 	        public void run() {  
 	        	try {  
-	        			SubstanceImageWatermark watermark  =   new  SubstanceImageWatermark("cba.jpg");
+	        			SubstanceImageWatermark watermark  =   new  SubstanceImageWatermark("./picture/cba.jpg");
 	        			watermark.setKind(ImageWatermarkKind.SCREEN_CENTER_SCALE);
 	        			SubstanceSkin skin  =   new  RavenGraphiteGlassSkin().withWatermark(watermark);   //初始化有水印的皮肤
 
@@ -109,7 +112,7 @@ public class HomePage implements ListSelectionListener{
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		if(list.getSelectedIndex() == 2){
+		if(list.getSelectedIndex() == 2){    //比赛查询
 			match c = new match();
 			JPanel result = c.go();
 			screen.get(count-1).setVisible(false);
@@ -117,7 +120,7 @@ public class HomePage implements ListSelectionListener{
 			count++;
 			first.add(result);
 		}
-		else if(list.getSelectedIndex() == 0){
+		else if(list.getSelectedIndex() == 0){     //球队查询
 			team c = new team();
 			JPanel result = c.go();
 			screen.get(count-1).setVisible(false);
@@ -125,7 +128,7 @@ public class HomePage implements ListSelectionListener{
 			count++;
 			first.add(result);
 		}
-		else if(list.getSelectedIndex() == 1){
+		else if(list.getSelectedIndex() == 1){     //球员查询
 			Member m = new Member();
 			JPanel result;
 			try {
@@ -139,10 +142,37 @@ public class HomePage implements ListSelectionListener{
 				e1.printStackTrace();
 			}
 		}
-		else if(list.getSelectedIndex() == 3){
+		else if(list.getSelectedIndex() == 3){      //当日热点球员
 			TodayHotPlayer h = new TodayHotPlayer();
 			JPanel result;
 			result = h.go();
+			screen.get(count-1).setVisible(false);
+			screen.add(result);
+			count++;
+			first.add(result);
+		}
+		else if(list.getSelectedIndex() == 4){     //赛季热点球员
+			SeasonHotPlayer s = new SeasonHotPlayer();
+			JPanel result;
+			result = s.go();
+			screen.get(count-1).setVisible(false);
+			screen.add(result);
+			count++;
+			first.add(result);
+		}
+		else if(list.getSelectedIndex() == 5){       //赛季热点球队
+			SeasonHotTeam s = new SeasonHotTeam();
+			JPanel result;
+			result = s.go();
+			screen.get(count-1).setVisible(false);
+			screen.add(result);
+			count++;
+			first.add(result);
+		}
+		else if(list.getSelectedIndex() == 6){       //进步最快球员
+			ProgressPlayer s = new ProgressPlayer();
+			JPanel result;
+			result = s.go();
 			screen.get(count-1).setVisible(false);
 			screen.add(result);
 			count++;

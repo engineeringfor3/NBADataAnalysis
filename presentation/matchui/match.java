@@ -20,7 +20,7 @@ public class match implements ActionListener,MouseListener{
 	JButton b = new JButton("下一个");
 	JButton d = new JButton("上一个");
 	JButton e = new JButton("下一个");
-	JLabel c = new JLabel(new ImageIcon("sv.png"));
+	JLabel c = new JLabel(new ImageIcon("./picture/sv.png"));
 	JPanel p2 = new JPanel();
 	JPanel p1 = new JPanel();
 	JPanel p3 = new JPanel();
@@ -52,12 +52,12 @@ public class match implements ActionListener,MouseListener{
 		d.setEnabled(false);
 			
 		a.setBounds(100,70,80,50);
-		b.setBounds(400,70,80,50);
-		c.setBounds(190,200,200,112);
-		p2.setBounds(240,50,100,100);
-		d.setBounds(100,370,80,50);
-		e.setBounds(400,370,80,50);
-		p1.setBounds(240,350,100,100);
+		b.setBounds(100,330,80,50);
+		c.setBounds(210,170,200,112);
+		p2.setBounds(90,180,100,100);
+		d.setBounds(450,70,80,50);
+		e.setBounds(450,330,80,50);
+		p1.setBounds(440,180,100,100);
 		p3.add(a);
 		p3.add(c);
 		p3.add(p2);
@@ -71,8 +71,8 @@ public class match implements ActionListener,MouseListener{
 		NBAteams[] a = NBAteams.values();
 		int i = 0;
 		for(NBAteams temp:a){
-			l[i] = new JLabel(new ImageIcon(temp.toString()+".png"));
-			l2[i] = new JLabel(new ImageIcon(temp.toString()+".png"));
+			l[i] = new JLabel(new ImageIcon("./picture/"+temp.toString()+".png"));
+			l2[i] = new JLabel(new ImageIcon("./picture/"+temp.toString()+".png"));
 			list.add(temp.toString());
 			list2.add(temp.toString());
 			i = i+1;
@@ -129,8 +129,8 @@ public class match implements ActionListener,MouseListener{
 			JOptionPane.showMessageDialog(null,"两支球队不能相同");
 		}
 		else{
-			Icon temp1 = new ImageIcon(name1+".png");
-			Icon temp2 = new ImageIcon(name2+".png");
+			Icon temp1 = new ImageIcon("./picture/"+name1+".png");
+			Icon temp2 = new ImageIcon("./picture/"+name2+".png");
 			JPanel result;
 			if(name1.equals("NOP")){
 				name1="NOH";
@@ -145,7 +145,7 @@ public class match implements ActionListener,MouseListener{
 				HomePage.count++;
 				HomePage.first.add(result);
 			} catch (IOException e1) {
-				// TODO 自动生成的 catch 块
+				JOptionPane.showMessageDialog(null,"获取数据失败");
 				e1.printStackTrace();
 			}
 		}

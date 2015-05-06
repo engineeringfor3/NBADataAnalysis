@@ -101,8 +101,24 @@ public class playerAllData implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO 自动生成的方法存根
+		JTable temp = (JTable) e.getSource();
+		SingleMatch m = new SingleMatch();
+		int x = temp.getSelectedRow();
+		MatchVO vo = matchInfo.get(x);
+		JLabel first = new JLabel(new ImageIcon(vo.getTeam1()+".png"));
+		JLabel second = new JLabel(new ImageIcon(vo.getTeam2()+".png"));
+		if(vo.getTeam1().equals("NOH")){
+			first = new JLabel(new ImageIcon("NOP.png"));
+		}
+		if(vo.getTeam2().equals("NOH")){
+			second = new JLabel(new ImageIcon("NOP.png"));
+		}
 		
+		JPanel p = m.go(vo,first,second);
+		HomePage.screen.get(HomePage.count-1).setVisible(false);
+		HomePage.screen.add(p);
+		HomePage.count++;
+		HomePage.first.add(p);
 	}
 
 	@Override

@@ -33,13 +33,25 @@ public class teamDataAnalysis implements MouseListener{
 		panel.setLayout(null);
 		panel.setSize(650,610);
 		
-		
-		name = changeName(n);
+		name = n;
 		icon = i;
 		
 		teamVO vo = t.getTeamData(name);
 		
-		String[][] result = new String[5][team.length];
+		String[][] result;
+		
+		if(vo.getMatchList().size()<=0){
+			JOptionPane.showMessageDialog(null,"该球队暂无比赛");
+		}
+		
+		if(vo.getMatchList().size()<5){
+			result = new String[vo.getMatchList().size()][team.length];
+		}
+	
+		else{
+			result = new String[5][team.length];
+		}
+		
 		list = vo.getMatchList();
 		for(int j=0;j<result.length;j++){
 			result[j][0] = list.get(j).getDate();
@@ -50,15 +62,11 @@ public class teamDataAnalysis implements MouseListener{
 		}
 		
 		MyTableModel tableModel = new MyTableModel(result,team);
-		TableRowSorter<MyTableModel> sorter = new TableRowSorter<MyTableModel>(tableModel);
 		table = new JTable(tableModel);
-		JScrollPane jsp = new JScrollPane(table);
-		table.setAutoCreateRowSorter(true); 
-		table.setRowSorter(sorter); 	
+		JScrollPane jsp = new JScrollPane(table);	
 		table.addMouseListener(this);
 		
 		JLabel image = new JLabel(i);
-		image.setBackground(Color.DARK_GRAY);
 		
 		image.setBounds(50,0,100,100);
 		jsp.setBounds(20,110,600,340);
@@ -80,7 +88,7 @@ public class teamDataAnalysis implements MouseListener{
 		zone.setBounds(400, 20,150,50);
 		subZone.setBounds(220, 40, 150, 50);
 		homecourt.setBounds(400,40, 150, 50);
-		launchTime.setBounds(220, 60, 150, 50);
+		launchTime.setBounds(220, 60, 500, 50);
 		
 		historyData.addMouseListener(this);
 		historyData.setForeground(Color.red);
@@ -92,6 +100,11 @@ public class teamDataAnalysis implements MouseListener{
 			column.setMaxWidth(90);
 			column.setMinWidth(90);
 		}
+		
+		DefaultTableCellRenderer cellrender = new DefaultTableCellRenderer();
+		cellrender.setHorizontalAlignment(JTextField.CENTER);
+		cellrender.setOpaque(false);
+		table.setDefaultRenderer(String.class, cellrender);
 		
 		panel.add(image);
 		panel.add(jsp);
@@ -106,104 +119,8 @@ public class teamDataAnalysis implements MouseListener{
 		return panel;
 	}
 	
-	private String changeName(String n) {
-		if(n.equals("ATL")){
-			return "Hawks";
-		}
-		else if(n.equals("BKN")){
-			return "Nets";
-		}
-		else if(n.equals("BOS")){
-			return "Celtics";
-		}
-		else if(n.equals("CHA")){
-			return "Hornets";
-		}
-		else if(n.equals("CHI")){
-			return "Bulls";
-		}
-		else if(n.equals("CLE")){
-			return "Cavaliers";
-		}
-		else if(n.equals("DAL")){
-			return "Mavericks";
-		}
-		else if(n.equals("DEN")){
-			return "Nuggets";
-		}
-		else if(n.equals("DET")){
-			return "Pistons";
-		}
-		else if(n.equals("GSW")){
-			return "Warriors";
-		}
-		else if(n.equals("HOU")){
-			return "Rockets";
-		}
-		else if(n.equals("IND")){
-			return "Pacers";
-		}
-		else if(n.equals("LAC")){
-			return "Clippers";
-		}
-		else if(n.equals("LAL")){
-			return "Lakers";
-		}
-		else if(n.equals("MEM")){
-			return "Grizzlies";
-		}
-		else if(n.equals("MIA")){
-			return "Heat";
-		}
-		else if(n.equals("MIL")){
-			return "Bucks";
-		}
-		else if(n.equals("MIN")){
-			return "Timberwolves";
-		}
-		else if(n.equals("NOP")){
-			return "Pelicans";
-		}
-		else if(n.equals("NYK")){
-			return "Knicks";
-		}
-		else if(n.equals("OKC")){
-			return "Thunder";
-		}
-		else if(n.equals("ORL")){
-			return "Magic";
-		}
-		else if(n.equals("PHI")){
-			return "76ers";
-		}
-		else if(n.equals("PHX")){
-			return "Suns";
-		}
-		else if(n.equals("POR")){
-			return "Trail Blazers";
-		}
-		else if(n.equals("SAC")){
-			return "Kings";
-		}
-		else if(n.equals("SAS")){
-			return "Spurs";
-		}
-		else if(n.equals("TOR")){
-			return "Raptors";
-		}
-		else if(n.equals("UTA")){
-			return "Jazz";
-		}
-		else{
-			return "Wizards";
-		}
-	}
-
 	class MyTableModel extends AbstractTableModel  { 
-		MemberLogic ml=new MemberLogic();
-	    private String[] columnNames ; 
-	    
-	    
+	    private String[] columnNames ;         
 	    private Object[][] data ;  
 	    
 	    public MyTableModel(Object[][] data,String[] columnNames) {
@@ -233,9 +150,7 @@ public class teamDataAnalysis implements MouseListener{
 	    public Class getColumnClass(int c) {  
 	      return getValueAt(0, c).getClass();  
 	    }  
-	    
-	    
-	  }
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -259,8 +174,8 @@ public class teamDataAnalysis implements MouseListener{
 			int x = temp.getSelectedRow();
 			MatchVO vo = list.get(x);
 			SingleMatch s = new SingleMatch();
-			JLabel first = new JLabel(new ImageIcon(vo.getTeam1()+".png"));
-			JLabel second = new JLabel(new ImageIcon(vo.getTeam2()+".png"));
+			JLabel first = new JLabel(new ImageIcon("./picture/"+vo.getTeam1()+".png"));
+			JLabel second = new JLabel(new ImageIcon("./picture/"+vo.getTeam2()+".png"));
 			if(vo.getTeam1().equals("NOH")){
 				first = new JLabel(new ImageIcon("NOP.png"));
 			}
