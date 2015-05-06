@@ -24,7 +24,7 @@ import playerui.SeasonHotTeam;
 import playerui.TodayHotPlayer;
 import teamui.team;
 
-public class HomePage implements ListSelectionListener{
+public class HomePage implements ListSelectionListener,ActionListener{
 	JFrame f = new JFrame("NBA数据查询平台");
 	String[] operation = {"球队查询","球员查询","比赛查询","当天热点球员","赛季热点球员","赛季热点球队","进步最快球员"};
 	public static JPanel first = new JPanel();           //第一层panel
@@ -36,8 +36,6 @@ public class HomePage implements ListSelectionListener{
 	
 	public static ArrayList<JPanel> screen = new ArrayList<JPanel>();     //存放所有的JPanel
 	JPanel buttonP = new JPanel();
-	JButton back = new JButton("返回");         //返回上一界面
-	JButton front = new JButton("前进");        //返回后一界面
 		
 	public HomePage(){
 		f.setLayout(new BorderLayout());
@@ -56,11 +54,7 @@ public class HomePage implements ListSelectionListener{
 		initList();
 		
 		buttonP.add(new JLabel(new ImageIcon("./picture/NBA.png")));	
-		buttonP.add(new JLabel("                                                                                    "));	
-		buttonP.add(back);
-		buttonP.add(front);
-		
-		back.setBounds(0, 0, 100, 50);
+		buttonP.add(new JLabel("                                                                                             "));	
 		
 			
 		f.getContentPane().add(BorderLayout.CENTER,first);
@@ -111,7 +105,7 @@ public class HomePage implements ListSelectionListener{
 	}
 
 	@Override
-	public void valueChanged(ListSelectionEvent e) {
+	public void valueChanged(ListSelectionEvent e) {		
 		if(list.getSelectedIndex() == 2){    //比赛查询
 			match c = new match();
 			JPanel result = c.go();
@@ -177,6 +171,19 @@ public class HomePage implements ListSelectionListener{
 			screen.add(result);
 			count++;
 			first.add(result);
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		for(int i=count;i>1;i--){
+			JFrame f = new JFrame();
+			JPanel p = screen.get(5);
+			f.add(p);
+			
+			f.setLocation(200,100);
+			f.setSize(650,610);
+			f.setVisible(true);
 		}
 	}
 }

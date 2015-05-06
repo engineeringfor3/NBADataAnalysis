@@ -143,13 +143,13 @@ public class MemberLogic implements PlayerBLService{
 		MemberData md=new MemberData();
 		MemberPO mp=new MemberPO();
 		mp=md.getMemberLiveData(name);
-		ArrayList<MatchPO> poList=mp.matchList;
+		ArrayList<MatchPO> poList=md.getMemberMatches(mp.name);
 		ArrayList<MatchVO> t=new ArrayList<MatchVO>();
 		for(MatchPO p:poList){
 			MatchVO v=new MatchVO(p);
 			t.add(v);
 		}
-		MemberVO result=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,t,mp.matchInfo);
+		MemberVO result=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,md.getTeamName(mp.name),t,md.getMatchInfo(mp.name));
 		return result;
 	}
 	
@@ -373,13 +373,13 @@ public class MemberLogic implements PlayerBLService{
 		for(int i=0;i<5;i++){
 			MemberPO h=memberList.get(i);
 			MemberPO mp=md.getMemberLiveData(h.name);
-			ArrayList<MatchPO> poList=mp.matchList;
+			ArrayList<MatchPO> poList=md.getMemberMatches(mp.name);
 			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
 			for(MatchPO p:poList){
 				MatchVO v=new MatchVO(p);
 				t.add(v);
 			}
-			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,mp.scoreProgressRate,mp.reboundProgressRate,mp.assistProgressRate,t,mp.matchInfo);
+			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,md.getTeamName(mp.name),mp.scoreProgressRate,mp.reboundProgressRate,mp.assistProgressRate,t,md.getMatchInfo(mp.name));
 			resultList.add(v);
 			
 		}
@@ -390,6 +390,8 @@ public class MemberLogic implements PlayerBLService{
 		ArrayList<MemberVO> resultList=new ArrayList<MemberVO>();
 		MemberData md=new MemberData();
 		memberList=md.newMemberList();
+		
+		
 		if(condition.equals("场均得分")){
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
@@ -435,21 +437,22 @@ public class MemberLogic implements PlayerBLService{
 				}
 			}
 		}
+		
 		for(int i=0;i<5;i++){
 			MemberPO h=memberList.get(i);
 			MemberPO mp=md.getMemberLiveData(h.name);
-			ArrayList<MatchPO> poList=mp.matchList;
+			ArrayList<MatchPO> poList=md.getMemberMatches(mp.name);
 			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
 			for(MatchPO p:poList){
 				MatchVO v=new MatchVO(p);
 				t.add(v);
 			}
-			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,mp.team,mp.scoreProgressRate,mp.reboundProgressRate,mp.assistProgressRate,t,mp.matchInfo);
+			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,md.getTeamName(mp.name),h.scoreProgressRate,h.reboundProgressRate,h.assistProgressRate,t,md.getMatchInfo(mp.name));
 			resultList.add(v);
 		}
+	
 		return resultList;
 	}
-
 	public ArrayList<MemberPO> toMemberList() {
 		MemberData md = new MemberData();
 		ArrayList<MemberPO> list = new ArrayList<MemberPO>();
@@ -460,14 +463,6 @@ public class MemberLogic implements PlayerBLService{
 			e.printStackTrace();
 		}
 		return list;
-	}
-	
-	
-	
-	
-	
-	
-	
-
+	}	
 }
 

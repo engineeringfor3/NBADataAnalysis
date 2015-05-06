@@ -65,9 +65,21 @@ public class playerInfo implements MouseListener{
 		
 		matchInfo = player.getMatchList();
 		playerInfo = player.getMatchInfo();
-		String[][] result = new String[5][info.length];
+		String[][] result;
+		
+		if(matchInfo.size()<=0){
+			JOptionPane.showMessageDialog(null,"该球员暂无比赛");
+		}
+		
+		if(matchInfo.size()<5){
+			result = new String[matchInfo.size()][info.length];
+		}
 	
-		for(int j=0;j<5;j++){
+		else{
+			result = new String[5][info.length];
+		}
+	
+		for(int j=0;j<result.length;j++){
 			result[j][0] = matchInfo.get(j).getDate();
 			result[j][1] = matchInfo.get(j).getTeam1();
 			result[j][2] = matchInfo.get(j).getTeam2();
@@ -128,13 +140,13 @@ public class playerInfo implements MouseListener{
 			SingleMatch m = new SingleMatch();
 			int x = temp.getSelectedRow();
 			MatchVO vo = matchInfo.get(x);
-			JLabel first = new JLabel(new ImageIcon(vo.getTeam1()+".png"));
-			JLabel second = new JLabel(new ImageIcon(vo.getTeam2()+".png"));
+			JLabel first = new JLabel(new ImageIcon("./picture/"+vo.getTeam1()+".png"));
+			JLabel second = new JLabel(new ImageIcon("./picture/"+vo.getTeam2()+".png"));
 			if(vo.getTeam1().equals("NOH")){
-				first = new JLabel(new ImageIcon("NOP.png"));
+				first = new JLabel(new ImageIcon("./picture/NOP.png"));
 			}
 			if(vo.getTeam2().equals("NOH")){
-				second = new JLabel(new ImageIcon("NOP.png"));
+				second = new JLabel(new ImageIcon("./picture/NOP.png"));
 			}
 			
 			JPanel p = m.go(vo,first,second);

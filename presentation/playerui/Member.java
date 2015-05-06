@@ -174,15 +174,13 @@ public class Member {
 	
 	class Listener implements MouseListener{
 		public void mouseClicked(MouseEvent e) {
-			if(table.getSelectedColumn() == 0){
-				playerInfo p = new playerInfo();
-				String name = (String) table.getValueAt(table.getSelectedRow(),0);
-				JPanel p4 = p.go(name);
-				HomePage.screen.get(HomePage.count-1).setVisible(false);
-				HomePage.screen.add(p4);
-				HomePage.count++;
-				HomePage.first.add(p4);
-			}
+			playerInfo p = new playerInfo();
+			String name = (String) table.getValueAt(table.getSelectedRow(),0);
+			JPanel p4 = p.go(name);
+			HomePage.screen.get(HomePage.count-1).setVisible(false);
+			HomePage.screen.add(p4);
+			HomePage.count++;
+			HomePage.first.add(p4);
 		}
 
 		@Override

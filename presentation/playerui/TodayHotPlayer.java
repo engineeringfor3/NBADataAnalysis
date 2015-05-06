@@ -5,8 +5,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 import playerbl.MemberLogic;
 
 public class TodayHotPlayer implements ActionListener,MouseListener{
@@ -16,10 +20,11 @@ public class TodayHotPlayer implements ActionListener,MouseListener{
 	JTable table = null;
 	MyTableModel model = null;
 	JComboBox choice = null;
-	String[][] result = new String[5][4];
+	String[][] result;
 	JWindow info = new JWindow();
 	String[][] player = null;
 	int status = 1;
+	String[] columnNames = { "球员", "所属球队","球员位置","筛选数据"};
 
 	public JPanel go() {
 		p.setLayout(null);
@@ -38,14 +43,12 @@ public class TodayHotPlayer implements ActionListener,MouseListener{
 			e.printStackTrace();
 		}
 		
-		String[] columnNames = { "球员名称", "所属球队","球员位置","筛选数据"};
-		
-		String[][] result = new String[5][4];
+		result = new String[5][4];
 		for(int i=0;i<player.length;i++){
 			result[i][0] = player[i][0];
-			result[i][1] = player[i][1];
+			result[i][1] = player[i][18];
 			result[i][2] = player[i][1];
-			result[i][3] = player[i][17];
+			result[i][3] = "得分:"+player[i][17];
 		}
 		
 		model = new MyTableModel(result,columnNames);  
@@ -57,6 +60,11 @@ public class TodayHotPlayer implements ActionListener,MouseListener{
 		JScrollPane js = new JScrollPane(table);
 		js.setBounds(0, 70, 650, 400);
 		js.setViewportView(table);
+		
+		DefaultTableCellRenderer cellrender = new DefaultTableCellRenderer();
+		cellrender.setHorizontalAlignment(JTextField.CENTER);
+		cellrender.setOpaque(false);
+		table.setDefaultRenderer(String.class, cellrender);
 	
 		p.add(choice);
 		p.add(b);
@@ -82,26 +90,22 @@ public class TodayHotPlayer implements ActionListener,MouseListener{
 	}
 
 	private void getData(String ch) {
-		if(ch.equals("得分")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置","筛选数据"};
-			
+		if(ch.equals("得分")){			
 			String[][] result = new String[5][4];
 			for(int i=0;i<player.length;i++){
 				result[i][0] = player[i][0];
-				result[i][1] = player[i][1];
+				result[i][1] = player[i][18];
 				result[i][2] = player[i][1];
 				result[i][3] = "得分:"+player[i][17];
 			}
 			model.setData(result, columnNames);
 			model.getColumnName(3);
 		}
-		else if(ch.equals("篮板")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置","筛选数据"};
-			
+		else if(ch.equals("篮板")){			
 			String[][] result = new String[5][4];
 			for(int i=0;i<player.length;i++){
 				result[i][0] = player[i][0];
-				result[i][1] = player[i][1];
+				result[i][1] = player[i][18];
 				result[i][2] = player[i][1];
 				result[i][3] = "篮板:"+player[i][11];
 			}
@@ -109,36 +113,30 @@ public class TodayHotPlayer implements ActionListener,MouseListener{
 			model.getColumnName(3);
 		}
 		else if(ch.equals("助攻")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置","筛选数据"};
-			
 			String[][] result = new String[5][4];
 			for(int i=0;i<player.length;i++){
 				result[i][0] = player[i][0];
-				result[i][1] = player[i][1];
+				result[i][1] = player[i][18];
 				result[i][2] = player[i][1];
 				result[i][3] = "助攻:"+player[i][12];
 			}
 			model.setData(result, columnNames);  
 		}
 		else if(ch.equals("盖帽")){
-			String[] columnNames = { "球员名称", "所属球队","球员位置","筛选数据"};
-			
 			String[][] result = new String[5][4];
 			for(int i=0;i<player.length;i++){
 				result[i][0] = player[i][0];
-				result[i][1] = player[i][1];
+				result[i][1] = player[i][18];
 				result[i][2] = player[i][1];
 				result[i][3] = "盖帽:"+player[i][14];
 			}
 			model.setData(result,columnNames); 
 		}
 		else {
-			String[] columnNames = { "球员名称", "所属球队","球员位置","筛选数据"};
-			
 			String[][] result = new String[5][4];
 			for(int i=0;i<player.length;i++){
 				result[i][0] = player[i][0];
-				result[i][1] = player[i][1];
+				result[i][1] = player[i][18];
 				result[i][2] = player[i][1];
 				result[i][3] = "抢断:"+player[i][13];
 			}
@@ -174,8 +172,6 @@ public class TodayHotPlayer implements ActionListener,MouseListener{
 		// TODO 自动生成的方法存根
 		
 	}
-	
-	
 }
 
 

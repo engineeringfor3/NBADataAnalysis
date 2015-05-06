@@ -14,12 +14,13 @@ import javax.swing.table.*;
 
 import mainui.HomePage;
 import matchui.SingleMatch;
+import matchui.match;
 import playerbl.MemberLogic;
 import teambl.teamsManager;
 import vo.MatchVO;
 import vo.teamVO;
 
-public class teamDataAnalysis implements MouseListener{
+public class teamDataAnalysis implements MouseListener,ActionListener{
 	JPanel panel = new JPanel();
 	String name = null;
 	Icon icon = null;
@@ -28,6 +29,7 @@ public class teamDataAnalysis implements MouseListener{
 	JLabel historyData = new JLabel("<html><u>历史数据</u><html>");
 	JTable table = null;
 	ArrayList<MatchVO> list = null;
+	JButton retu = new JButton("返回");
 	
 	public JPanel go(String n,Icon i) throws IOException{
 		panel.setLayout(null);
@@ -70,6 +72,10 @@ public class teamDataAnalysis implements MouseListener{
 		
 		image.setBounds(50,0,100,100);
 		jsp.setBounds(20,110,600,340);
+		
+		retu.setBounds(570,10,60,30);
+		
+		retu.addActionListener(this);
 		
 		table.setFillsViewportHeight(true);
 		table.setOpaque(false);
@@ -116,6 +122,7 @@ public class teamDataAnalysis implements MouseListener{
 		panel.add(homecourt);
 		panel.add(launchTime);
 		panel.add(historyData);
+		panel.add(retu);
 		return panel;
 	}
 	
@@ -213,5 +220,15 @@ public class teamDataAnalysis implements MouseListener{
 	public void mouseExited(MouseEvent e) {
 		// TODO 自动生成的方法存根
 		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		team m = new team();
+		JPanel result = m.go();
+		HomePage.screen.get(HomePage.count-1).setVisible(false);
+		HomePage.screen.add(result);
+		HomePage.count++;
+		HomePage.first.add(result);
 	}  
 }

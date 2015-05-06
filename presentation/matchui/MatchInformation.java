@@ -1,5 +1,7 @@
 package matchui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -16,13 +18,14 @@ import vo.MatchVO;
 import mainui.HomePage;
 import matchbl.MatchLogic;
 
-public class MatchInformation {
+public class MatchInformation implements ActionListener{
 	JPanel p = new JPanel();
 	JTable table = null;
 	DefaultTableModel model = null;
 	JLabel picture1 = null;
 	JLabel picture2 = null; 
 	ArrayList<MatchVO> list = null;
+	JButton retu = new JButton("返回");
 	
 	String[] match = {"比赛日期","比赛队伍","总比分","小节比分"};
 	
@@ -57,6 +60,9 @@ public class MatchInformation {
 		picture1.setBounds(100,30,100,100);
 		picture2.setBounds(420,30,100,100);
 		vs.setBounds(240,0,150,150);
+		retu.setBounds(570,10,60,30);
+		
+		retu.addActionListener(this);
 		
 		for(int k=0;k<3;k++){
 			TableColumn column = table.getColumnModel().getColumn(k);
@@ -68,6 +74,7 @@ public class MatchInformation {
 		p.add(picture1);
 		p.add(picture2);
 		p.add(vs);
+		p.add(retu);
 		return p;
 	}
 	
@@ -107,5 +114,15 @@ public class MatchInformation {
 			// TODO 自动生成的方法存根
 			
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		match m = new match();
+		JPanel result = m.go();
+		HomePage.screen.get(HomePage.count-1).setVisible(false);
+		HomePage.screen.add(result);
+		HomePage.count++;
+		HomePage.first.add(result);
 	}
 }

@@ -932,12 +932,30 @@ public class MemberData implements MemberDataService{
 			ArrayList<String[]> memberList=new ArrayList<String[]>();
 			String time=null;
 			List<File> files = getFiles("newData");
+			String lastTime=null;
+			String todayTime=null;
+			String []temp2=files.get(0).getName().split("_");
+	    	String firstTime=temp2[1];
+	    	if(firstTime.split("-")[0].equals("01")){
 		    for(File f : files){
 		    	String []temp=f.getName().split("_");
-		    	time="_"+temp[1];
+		    	time=temp[1];
+		    	if(time.split("-")[0].equals("10")){
+		    		todayTime=lastTime;
+		    		break;
+		    	}
+		    	lastTime=time;
 		    }
+	    	}
+	    	else{
+	    		for(File f : files){
+			    	String []temp=f.getName().split("_");
+			    	todayTime=temp[1];
+			    }
+	    	}
+		    todayTime="_"+todayTime;
 		    for(File f:files){
-		    	if(f.getName().contains(time)){
+		    	if(f.getName().contains(todayTime)){
 		    		MatchPO temp=md.getMatch(f.getName());
 		    		for(int i=0;i<temp.getPlayers1().length;i++){
 		    			memberList.add(temp.getPlayers1()[i]);

@@ -44,7 +44,7 @@ public class SeasonHotTeam implements ActionListener, MouseListener {
 		
 		choice = new JComboBox(choose);
 		JButton b = new JButton("确定");
-		choice.setBounds(10,20,150,30);
+		choice.setBounds(10,20,90,30);
 		b.setBounds(550, 20, 70, 30);
 		b.addActionListener(this);
 		
@@ -73,6 +73,11 @@ public class SeasonHotTeam implements ActionListener, MouseListener {
 		JScrollPane js = new JScrollPane(table);
 		js.setBounds(0, 70, 650, 400);
 		js.setViewportView(table);
+		
+		DefaultTableCellRenderer cellrender = new DefaultTableCellRenderer();
+		cellrender.setHorizontalAlignment(JTextField.CENTER);
+		cellrender.setOpaque(false);
+		table.setDefaultRenderer(String.class, cellrender);
 	
 		p.add(choice);
 		p.add(b);
@@ -194,8 +199,8 @@ public class SeasonHotTeam implements ActionListener, MouseListener {
 		JTable temp = (JTable) e.getSource();
 		int x = temp.getSelectedRow();
 		teamDataAnalysis t = new teamDataAnalysis();
-		String name = player.get(x).getShorts();
-		ImageIcon image = new ImageIcon(player.get(x).getShorts()+".png");
+		String name = changeName(player.get(x).getShorts());
+		ImageIcon image = new ImageIcon("./picture/"+player.get(x).getShorts()+".png");
 			
 		JPanel p4;
 		try {
@@ -227,5 +232,96 @@ public class SeasonHotTeam implements ActionListener, MouseListener {
 		// TODO 自动生成的方法存根
 		
 	}
-	
+	private String changeName(String n) {
+		if(n.equals("ATL")){
+			return "Hawks";
+		}
+		else if(n.equals("BKN")){
+			return "Nets";
+		}
+		else if(n.equals("BOS")){
+			return "Celtics";
+		}
+		else if(n.equals("CHA")){
+			return "Hornets";
+		}
+		else if(n.equals("CHI")){
+			return "Bulls";
+		}
+		else if(n.equals("CLE")){
+			return "Cavaliers";
+		}
+		else if(n.equals("DAL")){
+			return "Mavericks";
+		}
+		else if(n.equals("DEN")){
+			return "Nuggets";
+		}
+		else if(n.equals("DET")){
+			return "Pistons";
+		}
+		else if(n.equals("GSW")){
+			return "Warriors";
+		}
+		else if(n.equals("HOU")){
+			return "Rockets";
+		}
+		else if(n.equals("IND")){
+			return "Pacers";
+		}
+		else if(n.equals("LAC")){
+			return "Clippers";
+		}
+		else if(n.equals("LAL")){
+			return "Lakers";
+		}
+		else if(n.equals("MEM")){
+			return "Grizzlies";
+		}
+		else if(n.equals("MIA")){
+			return "Heat";
+		}
+		else if(n.equals("MIL")){
+			return "Bucks";
+		}
+		else if(n.equals("MIN")){
+			return "Timberwolves";
+		}
+		else if(n.equals("NOP")){
+			return "Pelicans";
+		}
+		else if(n.equals("NYK")){
+			return "Knicks";
+		}
+		else if(n.equals("OKC")){
+			return "Thunder";
+		}
+		else if(n.equals("ORL")){
+			return "Magic";
+		}
+		else if(n.equals("PHI")){
+			return "76ers";
+		}
+		else if(n.equals("PHX")){
+			return "Suns";
+		}
+		else if(n.equals("POR")){
+			return "Trail Blazers";
+		}
+		else if(n.equals("SAC")){
+			return "Kings";
+		}
+		else if(n.equals("SAS")){
+			return "Spurs";
+		}
+		else if(n.equals("TOR")){
+			return "Raptors";
+		}
+		else if(n.equals("UTA")){
+			return "Jazz";
+		}
+		else{
+			return "Wizards";
+		}
+	}
 }

@@ -13,7 +13,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JWindow;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import mainui.HomePage;
 import playerbl.MemberLogic;
@@ -26,7 +29,8 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 	JTable table = null;
 	MyTableModel model = null;
 	JComboBox choice = null;
-	String[][] result = new String[5][choose.length];
+	String[] columnNames = { "球员名称", "所属球队","球员位置"};
+	String[][] result;
 	ArrayList<MemberVO> player = null;
 
 	public JPanel go() {
@@ -35,7 +39,7 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 		
 		choice = new JComboBox(choose);
 		JButton b = new JButton("确定");
-		choice.setBounds(10,20,150,30);
+		choice.setBounds(10,20,90,30);
 		b.setBounds(550, 20, 70, 30);
 		b.addActionListener(this);
 		
@@ -45,10 +49,9 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 			JOptionPane.showMessageDialog(null, "获取信息错误");
 			e.printStackTrace();
 		}
-		
-		String[] columnNames = { "球员名称", "所属球队","球员位置"};
-		
-		String[][] result = new String[5][3];
+	
+		result = new String[5][columnNames.length];
+	
 		for(int i=0;i<player.size();i++){
 			result[i][0] = player.get(i).getName();
 			result[i][1] = player.get(i).getTeam();
@@ -65,6 +68,11 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 		js.setBounds(0, 70, 650, 400);
 		js.setViewportView(table);
 	
+		DefaultTableCellRenderer cellrender = new DefaultTableCellRenderer();
+		cellrender.setHorizontalAlignment(JTextField.CENTER);
+		cellrender.setOpaque(false);
+		table.setDefaultRenderer(String.class, cellrender);
+		
 		p.add(choice);
 		p.add(b);
 		p.add(js);
@@ -99,7 +107,6 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 			}
 			
 			model.setData(result, columnNames);
-			model.getColumnName(3);
 		}
 		else if(ch.equals("场均篮板")){
 			String[] columnNames = { "球员名称", "所属球队","球员位置"};
@@ -111,7 +118,6 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 				result[i][2] = player.get(i).getPosition();
 			}
 			model.setData(result, columnNames);
-			model.getColumnName(3);
 		}
 		else if(ch.equals("场均助攻")){
 			String[] columnNames = { "球员名称", "所属球队","球员位置"};
@@ -183,16 +189,14 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(table.getSelectedColumn() == 0){
-			playerInfo p = new playerInfo();
-			String name = (String) table.getValueAt(table.getSelectedRow(),
-					table.getSelectedColumn());
-			JPanel p4 = p.go(name);
-			HomePage.screen.get(HomePage.count-1).setVisible(false);
-			HomePage.screen.add(p4);
-			HomePage.count++;
-			HomePage.first.add(p4);
-		}
+		playerInfo p = new playerInfo();
+		String name = (String) table.getValueAt(table.getSelectedRow(),
+					0);
+		JPanel p4 = p.go(name);
+		HomePage.screen.get(HomePage.count-1).setVisible(false);
+		HomePage.screen.add(p4);
+		HomePage.count++;
+		HomePage.first.add(p4);
 	}
 
 	@Override
@@ -213,5 +217,42 @@ public class SeasonHotPlayer implements ActionListener, MouseListener {
 		
 	}
 	
-	
+	class MyTableModel extends AbstractTableModel  { 
+	    private String[] columnNames ; 
+	    private Object[][] data ;  
+	    
+	    public MyTableModel(Object[][] data,String[] columnNames) {
+	        super();
+	        this.data = data;
+	        this.columnNames=columnNames;
+	         
+	    }
+	 
+	    public int getColumnCount() {  
+	      return columnNames.length;  
+	    }  
+	  
+	    public int getRowCount() {  
+	      return data.length;  
+	    }  
+	    
+	    
+	    public void setData(Object[][] data,String[] columnNames){
+	    	this.data = data;
+	        this.columnNames=columnNames;
+	    	
+	    }
+	  
+	    public String getColumnName(int col) {  
+	      return columnNames[col];  
+	    }  
+	  
+	    public Object getValueAt(int row, int col) {  
+	      return data[row][col];  
+	    }  
+	 
+	    public Class getColumnClass(int c) {  
+	      return getValueAt(0, c).getClass();  
+	    }  
+	}
 }

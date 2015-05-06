@@ -52,7 +52,6 @@ public class playerAllData implements MouseListener{
 		
 		matchInfo = player.getMatchList();
 		playerInfo = player.getMatchInfo();
-		System.out.println(matchInfo.size()+"  "+playerInfo.size());
 		String[][] result = new String[matchInfo.size()][info.length];
 		
 		for(int j=0;j<matchInfo.size();j++){
@@ -105,13 +104,13 @@ public class playerAllData implements MouseListener{
 		SingleMatch m = new SingleMatch();
 		int x = temp.getSelectedRow();
 		MatchVO vo = matchInfo.get(x);
-		JLabel first = new JLabel(new ImageIcon(vo.getTeam1()+".png"));
-		JLabel second = new JLabel(new ImageIcon(vo.getTeam2()+".png"));
+		JLabel first = new JLabel(new ImageIcon("./picture/"+vo.getTeam1()+".png"));
+		JLabel second = new JLabel(new ImageIcon("./picture/"+vo.getTeam2()+".png"));
 		if(vo.getTeam1().equals("NOH")){
-			first = new JLabel(new ImageIcon("NOP.png"));
+			first = new JLabel(new ImageIcon("./picture/NOP.png"));
 		}
 		if(vo.getTeam2().equals("NOH")){
-			second = new JLabel(new ImageIcon("NOP.png"));
+			second = new JLabel(new ImageIcon("./picture/NOP.png"));
 		}
 		
 		JPanel p = m.go(vo,first,second);
