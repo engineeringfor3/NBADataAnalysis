@@ -43,7 +43,7 @@ public class teamVO {
 	private String launchTime;
 	private ArrayList<MatchVO> matchList;
 	
-	
+	private Double value;
 	public teamVO(TeamPO p){
 		this.name=p.name;
 		this.shorts=p.shorts;
@@ -335,5 +335,13 @@ public class teamVO {
 	}
 	public String getLaunchTime(){
 		return launchTime;
+	}
+	
+	public void setValue(Double value){
+		this.value=value;
+	}
+	
+	public Double getValue(){
+		return this.value;
 	}
 }

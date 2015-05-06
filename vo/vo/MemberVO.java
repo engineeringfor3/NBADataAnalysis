@@ -21,6 +21,9 @@ public class MemberVO {
 	private ArrayList<MatchVO> matchList;
 	private ArrayList<String[]> matchInfo;
 	
+	private Double value;
+	
+	
 	public MemberVO(String name,String number,String position,String height,String weight,String birth,String age,String exp,String school,String team,double scoreProgressRate,double reboundProgressRate,double assistProgressRate,ArrayList<MatchVO> matchList,ArrayList<String[]> matchInfo){
 		this.name=name;
 		this.number=number;
@@ -50,9 +53,6 @@ public class MemberVO {
 		this.exp=exp;
 		this.school=school;
 		this.team=team;
-		this.scoreProgressRate=scoreProgressRate;
-		this.reboundProgressRate=reboundProgressRate;
-		this.assistProgressRate=assistProgressRate;
 		this.matchList=matchList;
 		this.matchInfo=matchInfo;
 	}
@@ -68,12 +68,41 @@ public class MemberVO {
 		this.exp=exp;
 		this.school=school;
 		this.team=team;
-		this.scoreProgressRate=scoreProgressRate;
-		this.reboundProgressRate=reboundProgressRate;
-		this.assistProgressRate=assistProgressRate;
 		this.matchList=matchList;
-		this.matchInfo=matchInfo;
 	}
+	
+	public MemberVO(){
+		this.name=null;
+		this.number=null;
+		this.position=null;
+		this.height=null;
+		this.weight=null;
+		this.birth=null;
+		this.age=null;
+		this.exp=null;
+		this.school=null;
+		this.team=null;
+	}
+	
+	public void setValue(Double value){
+		this.value=value;
+	}
+	
+	public Double getValue(){
+		return this.value;
+	}
+	
+	public void setName(String name){
+		this.name=name;
+	}
+	
+    public void setPosition(String position){
+    	this.position=position;
+    }
+    
+    public void setTeam(String team){
+    	this.team=team;
+    }
 	
 	public String getName(){
 		return this.name;
@@ -134,6 +163,8 @@ public class MemberVO {
 	public ArrayList<String[]> getMatchInfo(){
 		return this.matchInfo;
 	}
+	
+	
 	
 	
 }

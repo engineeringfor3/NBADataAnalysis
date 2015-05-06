@@ -83,7 +83,7 @@ public class ProgressPlayer implements ActionListener, MouseListener {
 	public void actionPerformed(ActionEvent e) {
 		String ch = (String) choice.getSelectedItem();
 		try {
-			player = m.getSeasonHotPlayer(ch);
+			player = m.getProgressPlayer(ch);
 		} catch (IOException e1) {
 			JOptionPane.showMessageDialog(null, "获取数据错误");
 			e1.printStackTrace();

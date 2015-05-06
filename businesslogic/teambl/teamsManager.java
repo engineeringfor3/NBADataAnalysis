@@ -418,14 +418,30 @@ public class teamsManager implements TeamBLService{
 		
 		for(int i=0;i<5;i++){
 			TeamPO p=poList.get(i);
-			teamVO v=new teamVO(p);
-			ArrayList<MatchPO> matchList=td.getTeamMatches(v.getName());
-			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
-			for(MatchPO e:matchList){
-				MatchVO m=new MatchVO(e);
-				t.add(m);
+			teamVO v=new teamVO(p);		
+			if(condition.equals("场均得分"))
+				v.setValue(p.getAverageScore());
+			if(condition.equals("场均篮板")){
+				v.setValue(p.getAverageRebound());
 			}
-			v.setMatchList(t);
+			if(condition.equals("场均助攻")){
+				v.setValue(p.getAverageAssist());
+			}
+			if(condition.equals("场均盖帽")){
+				v.setValue(p.getAverageBlockShot());
+			}
+			if(condition.equals("场均抢断")){
+				v.setValue(p.getAverageSteal());
+			}
+			if(condition.equals("三分命中率")){
+				v.setValue(p.getThreeShotRate());
+			}
+			if(condition.equals("投篮命中率")){
+				v.setValue(p.getShotRate());
+			}
+			if(condition.equals("罚球命中率")){
+				v.setValue(p.getPenaltyShotRate());
+			}
 			teamList.add(v);
 		}
 		return teamList;
@@ -445,6 +461,14 @@ public class teamsManager implements TeamBLService{
 		}
 		v.setMatchList(t);
 		return v;
+	}
+	
+	public static void main(String [] args)throws IOException{
+		teamsManager tm=new teamsManager();
+		ArrayList<teamVO> teamList=tm.getSeasonHotTeam("罚球命中率");
+		for(teamVO v:teamList){
+			System.out.println(v.getName()+" "+v.getValue()+" "+v.getZone());
+		}
 	}
 	
 	

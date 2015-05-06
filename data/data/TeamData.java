@@ -108,64 +108,7 @@ public class TeamData implements TeamDataService{
 		}
 		
 		
-		List<File> files = getFiles("newData");
-		 for(File f : files){
-		    	int first=0,second=0;
-		    	ArrayList<String[]> dataList=new ArrayList<String[]>();
-		        dataList=getContentByLocalFile(f);
-		        for(int i=0;i<dataList.size();i++){
-		        	if(dataList.get(i).length==1){
-		        		first=i;
-		        		break;
-		        	}
-		        }
-		        for(int i=first;i<dataList.size();i++){
-		        	if(dataList.get(i).length==1){
-		        		second=i;
-		        	}
-		        }//得到文档的队伍名称以及位置
-		       
-		       
-		        		
-		               if(tem.shorts.equals(dataList.get(first)[0])){
-		        			tem.number+=1;
-		        			tem.scores+=Integer.parseInt(dataList.get(0)[2].split("-")[0]);
-		        			for(int i=first+1;i<second;i++){
-			        			tem.rebounds+=Integer.parseInt(dataList.get(i)[11]);
-			        			tem.assists+=Integer.parseInt(dataList.get(i)[12]);
-			        			tem.blockShots+=Integer.parseInt(dataList.get(i)[14]);
-			        			tem.steals+=Integer.parseInt(dataList.get(i)[13]);
-			        			tem.shots+=Integer.parseInt(dataList.get(i)[4]);
-			        			tem.shotHits+=Integer.parseInt(dataList.get(i)[3]);
-			        			tem.threeShots+=Integer.parseInt(dataList.get(i)[6]);
-			        			tem.threeShotHits+=Integer.parseInt(dataList.get(i)[5]);
-			        			tem.penaltyShots+=Integer.parseInt(dataList.get(i)[8]);
-			        			tem.penaltyShotHits+=Integer.parseInt(dataList.get(i)[7]);
-			        		}
-		        		}
-		        		
-		        		if(tem.shorts.equals(dataList.get(second)[0])){
-		        			tem.number+=1;
-		        			tem.scores+=Integer.parseInt(dataList.get(0)[2].split("-")[1]);
-		        			for(int i=second+1;i<dataList.size();i++){
-			        			tem.rebounds+=Integer.parseInt(dataList.get(i)[11]);
-			        			tem.assists+=Integer.parseInt(dataList.get(i)[12]);
-			        			tem.blockShots+=Integer.parseInt(dataList.get(i)[14]);
-			        			tem.steals+=Integer.parseInt(dataList.get(i)[13]);
-			        			tem.shots+=Integer.parseInt(dataList.get(i)[4]);
-			        			tem.shotHits+=Integer.parseInt(dataList.get(i)[3]);
-			        			tem.threeShots+=Integer.parseInt(dataList.get(i)[6]);
-			        			tem.threeShotHits+=Integer.parseInt(dataList.get(i)[5]);
-			        			tem.penaltyShots+=Integer.parseInt(dataList.get(i)[8]);
-			        			tem.penaltyShotHits+=Integer.parseInt(dataList.get(i)[7]);
-			        		}
-		        		}
-		        		
-		        
-		        
-		        
-		       
-		    }
+		
 	    
 		return tem;
 		
@@ -242,6 +185,65 @@ public class TeamData implements TeamDataService{
  				
  			}
 	        }
+	    for(File f : files){
+	    	int first=0,second=0;
+	    	ArrayList<String[]> dataList=new ArrayList<String[]>();
+	        dataList=getContentByLocalFile(f);
+	        for(int i=0;i<dataList.size();i++){
+	        	if(dataList.get(i).length==1){
+	        		first=i;
+	        		break;
+	        	}
+	        }
+	        for(int i=first;i<dataList.size();i++){
+	        	if(dataList.get(i).length==1){
+	        		second=i;
+	        	}
+	        }//得到文档的队伍名称以及位置
+	       
+	       
+	        	for(TeamPO tem:teamList)	{
+	               if(tem.shorts.equals(dataList.get(first)[0])){
+	        			tem.number+=1;
+	        			tem.scores+=Integer.parseInt(dataList.get(0)[2].split("-")[0]);
+	        			for(int i=first+1;i<second;i++){
+		        			tem.rebounds+=Integer.parseInt(dataList.get(i)[11]);
+		        			tem.assists+=Integer.parseInt(dataList.get(i)[12]);
+		        			tem.blockShots+=Integer.parseInt(dataList.get(i)[14]);
+		        			tem.steals+=Integer.parseInt(dataList.get(i)[13]);
+		        			tem.shots+=Integer.parseInt(dataList.get(i)[4]);
+		        			tem.shotHits+=Integer.parseInt(dataList.get(i)[3]);
+		        			tem.threeShots+=Integer.parseInt(dataList.get(i)[6]);
+		        			tem.threeShotHits+=Integer.parseInt(dataList.get(i)[5]);
+		        			tem.penaltyShots+=Integer.parseInt(dataList.get(i)[8]);
+		        			tem.penaltyShotHits+=Integer.parseInt(dataList.get(i)[7]);
+		        		}
+	        		}
+	        		
+	        		if(tem.shorts.equals(dataList.get(second)[0])){
+	        			tem.number+=1;
+	        			tem.scores+=Integer.parseInt(dataList.get(0)[2].split("-")[1]);
+	        			for(int i=second+1;i<dataList.size();i++){
+		        			tem.rebounds+=Integer.parseInt(dataList.get(i)[11]);
+		        			tem.assists+=Integer.parseInt(dataList.get(i)[12]);
+		        			tem.blockShots+=Integer.parseInt(dataList.get(i)[14]);
+		        			tem.steals+=Integer.parseInt(dataList.get(i)[13]);
+		        			tem.shots+=Integer.parseInt(dataList.get(i)[4]);
+		        			tem.shotHits+=Integer.parseInt(dataList.get(i)[3]);
+		        			tem.threeShots+=Integer.parseInt(dataList.get(i)[6]);
+		        			tem.threeShotHits+=Integer.parseInt(dataList.get(i)[5]);
+		        			tem.penaltyShots+=Integer.parseInt(dataList.get(i)[8]);
+		        			tem.penaltyShotHits+=Integer.parseInt(dataList.get(i)[7]);
+		        		}
+	        		}
+	        		
+	        	}
+		        
+		        
+		       
+		    }
+	    
+	  
 		return teamList;
 	}//得到team数据列表
 	
@@ -258,7 +260,7 @@ public class TeamData implements TeamDataService{
 		ArrayList<TeamPO> teamList=td.getTeamList();
 		System.out.println(teamList.size());
 		for(TeamPO p:teamList){
-			System.out.println(p.time+" "+p.location+" "+p.assists+" "+p.number+" "+p.getAverageAssist());
+			System.out.println(p.name+" "+p.getAverageScore());
 		}
 		
 	}

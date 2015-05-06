@@ -1,12 +1,14 @@
 package playerbl;
 import po.MemberPO;
+import po.ProgressPlayer;
+import po.SeasonPlayer;
 import po.MatchPO;
 import vo.MemberVO;
 import blservice.PlayerBLService;
 import vo.MatchVO;
 import vo.MemberVO;
 import data.MemberData;
-
+import data.TeamData;
 import java.util.*;
 import java.io.*;
 
@@ -244,17 +246,21 @@ public class MemberLogic implements PlayerBLService{
 		return answer;
 		
 	}
+	
+	
+	
+	
 	public ArrayList<MemberVO> getSeasonHotPlayer(String condition)throws IOException{
-		ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
+		ArrayList<SeasonPlayer> memberList=new ArrayList<SeasonPlayer>();
 		ArrayList<MemberVO> resultList=new ArrayList<MemberVO>();
 		MemberData md=new MemberData();
-		memberList=md.newMemberList();
+		memberList=md.seasonMemberList();
 		if(condition.equals("场均得分")){
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).averageScores)>Double.valueOf(memberList.get(j-1).averageScores)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						SeasonPlayer temp=memberList.get(j);
+						SeasonPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -268,8 +274,8 @@ public class MemberLogic implements PlayerBLService{
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).averageRebounds)>Double.valueOf(memberList.get(j-1).averageRebounds)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						SeasonPlayer temp=memberList.get(j);
+						SeasonPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -283,8 +289,8 @@ public class MemberLogic implements PlayerBLService{
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).averageAssists)>Double.valueOf(memberList.get(j-1).averageAssists)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						SeasonPlayer temp=memberList.get(j);
+						SeasonPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -298,8 +304,8 @@ public class MemberLogic implements PlayerBLService{
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).averageBlocks)>Double.valueOf(memberList.get(j-1).averageBlocks)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						SeasonPlayer temp=memberList.get(j);
+						SeasonPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -313,8 +319,8 @@ public class MemberLogic implements PlayerBLService{
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).averageSteals)>Double.valueOf(memberList.get(j-1).averageSteals)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						SeasonPlayer temp=memberList.get(j);
+						SeasonPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -328,8 +334,8 @@ public class MemberLogic implements PlayerBLService{
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).threeShotRate)>Double.valueOf(memberList.get(j-1).threeShotRate)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						SeasonPlayer temp=memberList.get(j);
+						SeasonPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -343,8 +349,8 @@ public class MemberLogic implements PlayerBLService{
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).shotHitRate)>Double.valueOf(memberList.get(j-1).shotHitRate)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						SeasonPlayer temp=memberList.get(j);
+						SeasonPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -358,8 +364,8 @@ public class MemberLogic implements PlayerBLService{
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).penaltyShotRate)>Double.valueOf(memberList.get(j-1).penaltyShotRate)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						SeasonPlayer temp=memberList.get(j);
+						SeasonPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -369,35 +375,55 @@ public class MemberLogic implements PlayerBLService{
 				}
 			}
 		}
-	
+		TeamData d=new TeamData();
 		for(int i=0;i<5;i++){
-			MemberPO h=memberList.get(i);
-			MemberPO mp=md.getMemberLiveData(h.name);
-			ArrayList<MatchPO> poList=md.getMemberMatches(mp.name);
-			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
-			for(MatchPO p:poList){
-				MatchVO v=new MatchVO(p);
-				t.add(v);
+			SeasonPlayer h=memberList.get(i);
+			MemberVO v=new MemberVO();
+			v.setName(h.name);
+			v.setPosition(md.passPosition(h.name));
+			v.setTeam(d.getTeamName(h.team));
+			if(condition.equals("场均得分"))
+				v.setValue(h.averageScores);
+			if(condition.equals("场均篮板")){
+				v.setValue(h.averageRebounds);
 			}
-			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,md.getTeamName(mp.name),mp.scoreProgressRate,mp.reboundProgressRate,mp.assistProgressRate,t,md.getMatchInfo(mp.name));
+			if(condition.equals("场均助攻")){
+				v.setValue(h.averageAssists);
+			}
+			if(condition.equals("场均盖帽")){
+				v.setValue(h.averageBlocks);
+			}
+			if(condition.equals("场均抢断")){
+				v.setValue(h.averageSteals);
+			}
+			if(condition.equals("三分命中率")){
+				v.setValue(h.threeShotRate);
+			}
+			if(condition.equals("投篮命中率")){
+				v.setValue(h.shotHitRate);
+			}
+			if(condition.equals("罚球命中率")){
+				v.setValue(h.penaltyShotRate);
+			}
 			resultList.add(v);
-			
 		}
 		return resultList;
 	}
+	
+	
 	public ArrayList<MemberVO> getProgressPlayer(String condition)throws IOException{
-		ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
+		ArrayList<ProgressPlayer> memberList=new ArrayList<ProgressPlayer>();
 		ArrayList<MemberVO> resultList=new ArrayList<MemberVO>();
 		MemberData md=new MemberData();
-		memberList=md.newMemberList();
+		memberList=md.progressMemberList();
 		
 		
 		if(condition.equals("场均得分")){
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).scoreProgressRate)>Double.valueOf(memberList.get(j-1).scoreProgressRate)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						ProgressPlayer temp=memberList.get(j);
+						ProgressPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -411,8 +437,8 @@ public class MemberLogic implements PlayerBLService{
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).reboundProgressRate)>Double.valueOf(memberList.get(j-1).reboundProgressRate)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						ProgressPlayer temp=memberList.get(j);
+						ProgressPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -426,8 +452,8 @@ public class MemberLogic implements PlayerBLService{
 			for(int i=0;i<memberList.size()-1;i++){
 				for(int j=memberList.size()-1;j>i;j--){
 					if(Double.valueOf(memberList.get(j).assistProgressRate)>Double.valueOf(memberList.get(j-1).assistProgressRate)){
-						MemberPO temp=memberList.get(j);
-						MemberPO  temp1=memberList.get(j-1);
+						ProgressPlayer temp=memberList.get(j);
+						ProgressPlayer  temp1=memberList.get(j-1);
 						memberList.remove(j);
 						memberList.add(j,temp1);
 						memberList.remove(j-1);
@@ -437,22 +463,28 @@ public class MemberLogic implements PlayerBLService{
 				}
 			}
 		}
-		
+		TeamData d=new TeamData();
 		for(int i=0;i<5;i++){
-			MemberPO h=memberList.get(i);
-			MemberPO mp=md.getMemberLiveData(h.name);
-			ArrayList<MatchPO> poList=md.getMemberMatches(mp.name);
-			ArrayList<MatchVO> t=new ArrayList<MatchVO>();
-			for(MatchPO p:poList){
-				MatchVO v=new MatchVO(p);
-				t.add(v);
+			ProgressPlayer h=memberList.get(i);
+			MemberVO v=new MemberVO();
+			v.setName(h.name);
+			v.setPosition(md.passPosition(h.name));
+			v.setTeam(d.getTeamName(h.team));
+			if(condition.equals("场均得分"))
+				v.setValue(h.scoreProgressRate);
+			if(condition.equals("场均篮板")){
+				v.setValue(h.reboundProgressRate);
 			}
-			MemberVO v=new MemberVO(mp.name,mp.number,mp.position,mp.height,mp.weight,mp.birth,mp.age,mp.exp,mp.school,md.getTeamName(mp.name),h.scoreProgressRate,h.reboundProgressRate,h.assistProgressRate,t,md.getMatchInfo(mp.name));
+			if(condition.equals("场均助攻")){
+				v.setValue(h.assistProgressRate);
+			}
 			resultList.add(v);
 		}
 	
 		return resultList;
 	}
+	
+	
 	public ArrayList<MemberPO> toMemberList() {
 		MemberData md = new MemberData();
 		ArrayList<MemberPO> list = new ArrayList<MemberPO>();
@@ -464,5 +496,16 @@ public class MemberLogic implements PlayerBLService{
 		}
 		return list;
 	}	
+	
+	
+	
+	public static void main(String[] args)throws IOException{
+		MemberLogic ml=new MemberLogic();
+		ArrayList<MemberVO> memberList=ml.getProgressPlayer("场均篮板");
+		for(MemberVO p:memberList){
+			System.out.println(p.getName()+" "+p.getTeam()+" "+p.getPosition()+" "+p.getValue());
+		}
+	}
+
 }
 

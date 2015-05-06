@@ -1,12 +1,13 @@
 package data;
 
 import dataservice.*;
+import po.SeasonPlayer;
 import po.MatchPO;
 import po.MemberPO;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
-
+import po.ProgressPlayer;
 
 
 public class MemberData implements MemberDataService{
@@ -428,10 +429,202 @@ public class MemberData implements MemberDataService{
 		    }
 			return matchList;
 		}
+		
+		public  ArrayList<SeasonPlayer> seasonMemberList()throws IOException {
+			ArrayList<SeasonPlayer> memberList=new ArrayList<SeasonPlayer>();
+			 List<File> files = getFiles("newData");
+			    for(File f : files){
+			    	int first=0,second=0;
+			    	ArrayList<String[]> dataList=new ArrayList<String[]>();
+			        dataList=getContentByLocalFile(f);
+			        for(int i=0;i<dataList.size();i++){
+			        	if(dataList.get(i).length==1){
+			        		first=i;
+			        		break;
+			        	}
+			        }
+			        for(int i=first;i<dataList.size();i++){
+			        	if(dataList.get(i).length==1){
+			        		second=i;
+			        	}
+			        }//得到文档的队伍名称以及位置
+			        for(int i=first+1;i<second;i++){
+			        	String temp=dataList.get(i)[0];
+			        	SeasonPlayer te=new SeasonPlayer();
+			        	te.name=temp;
+			        	boolean contain=false;
+			        	for(SeasonPlayer a:memberList){
+			        		if(a.name.equals(temp))
+			        			contain=true;
+			        	}
+			        	if(contain==false){
+			        		memberList.add(te);
+			        	}
+			        }
+			        for(int i=second+1;i<dataList.size();i++){
+			        	String temp=dataList.get(i)[0];
+			        	SeasonPlayer te=new SeasonPlayer();
+			        	te.name=temp;
+			        	boolean contain=false;
+			        	for(SeasonPlayer a:memberList){
+			        		if(a.name.equals(temp))
+			        			contain=true;
+			        	}
+			        	if(contain==false){
+			        		memberList.add(te);
+			        	}
+			        }
+			    }
+			    
+			    
+			    
+			    for(File f : files){
+			    	int first=0,second=0;
+			    	ArrayList<String[]> dataList=new ArrayList<String[]>();
+			        dataList=getContentByLocalFile(f);
+			        for(int i=0;i<dataList.size();i++){
+			        	if(dataList.get(i).length==1){
+			        		first=i;
+			        		break;
+			        	}
+			        }
+			        for(int i=first;i<dataList.size();i++){
+			        	if(dataList.get(i).length==1){
+			        		second=i;
+			        	}
+			        }//得到文档的队伍名称以及位置
+			        for(int i=first+1;i<second;i++){
+			        	String t[]=dataList.get(i);
+			        	if(t[17].equals("null")){
+			        		int memberAll=0;
+			        		for(int j=first+1;j<second;j++){
+			        			if(j!=i){
+			        			memberAll+=Integer.parseInt(dataList.get(j)[17]);
+			        			}
+			        		}
+			        		t[17]=String.valueOf(Integer.parseInt(dataList.get(0)[2].split("-")[0])-memberAll);
+			        	}
+			        	for(int j=0;j<memberList.size();j++){
+			        		SeasonPlayer tem=memberList.get(j);
+			        		if(tem.name.equals(t[0])){
+			        			tem.team=dataList.get(first)[0];
+			        			tem.inMatches+=1;
+			        			tem.shotHits+=Integer.parseInt(t[3]);
+			        			tem.shots+=Integer.parseInt(t[4]);
+			        			tem.threeShotHits+=Integer.parseInt(t[5]);
+			        			tem.threeShots+=Integer.parseInt(t[6]);
+			        			tem.penaltyShotHits+=Integer.parseInt(t[7]);
+			        			tem.penaltyShots+=Integer.parseInt(t[8]);
+			        			tem.rebounds+=Integer.parseInt(t[11]);
+			        			tem.assists+=Integer.parseInt(t[12]);
+			        			tem.steals+=Integer.parseInt(t[13]);
+			        			tem.blockShots+=Integer.parseInt(t[14]);
+			        			tem.scores+=Integer.parseInt(t[17]);
+			        			tem.averageScores=tem.scores/(tem.inMatches*1.0);	
+			        			tem.averageScores=Double.valueOf(df.format(tem.averageScores));
+			        			tem.averageAssists=tem.assists/(tem.inMatches*1.0);
+			        			tem.averageAssists=Double.valueOf(df.format(tem.averageAssists));
+			        			tem.averageBlocks=tem.blockShots/(tem.inMatches*1.0);
+			        			tem.averageBlocks=Double.valueOf(df.format(tem.averageBlocks));
+			        			tem.averageSteals=tem.steals/(tem.inMatches*1.0);
+			        			tem.averageSteals=Double.valueOf(df.format(tem.averageSteals));
+			        			tem.averageRebounds=tem.rebounds/(tem.inMatches*1.0);
+			        			tem.averageRebounds=Double.valueOf(df.format(tem.averageRebounds));
+			        			if(tem.shots==0)
+			        				tem.shotHitRate=0.0;
+			        			else{
+			        			tem.shotHitRate=tem.shotHits/(tem.shots*1.0);
+			        			tem.shotHitRate=Double.valueOf(cf.format(tem.shotHitRate));
+			        			}
+			        			if(tem.threeShots==0)
+			        				tem.threeShotRate=0.0;
+			        			else{
+			        			tem.threeShotRate=tem.threeShotHits/(tem.threeShots*1.0);
+			        			tem.threeShotRate=Double.valueOf(cf.format(tem.threeShotRate));
+			        			}
+			        			if(tem.penaltyShots==0)
+			        				tem.penaltyShotRate=0.0;
+			        			else{
+			        			tem.penaltyShotRate=tem.penaltyShotHits/(tem.penaltyShots*1.0);
+			        			tem.penaltyShotRate=Double.valueOf(cf.format(tem.penaltyShotRate));
+			        			}
+			        			
+			        			}
+			        		memberList.remove(j);
+			        		memberList.add(j,tem);
+			        	}
+			        }
+			        for(int i=second+1;i<dataList.size();i++){
+			        	String t[]=dataList.get(i);
+			        	if(t[17].equals("null")){
+			        		int memberAll=0;
+			        		for(int j=second+1;j<dataList.size();j++){
+			        			if(j!=i){
+			        			memberAll+=Integer.parseInt(dataList.get(j)[17]);
+			        			}
+			        		}
+			        		t[17]=String.valueOf(Integer.parseInt(dataList.get(0)[2].split("-")[1])-memberAll);
+			        	}
+			        	for(int j=0;j<memberList.size();j++){
+			        		SeasonPlayer tem=memberList.get(j);
+			        		if(tem.name.equals(t[0])){
+			        			tem.team=dataList.get(second)[0];
+			        			tem.inMatches+=1;
+			        			tem.shotHits+=Integer.parseInt(t[3]);
+			        			tem.shots+=Integer.parseInt(t[4]);
+			        			tem.threeShotHits+=Integer.parseInt(t[5]);
+			        			tem.threeShots+=Integer.parseInt(t[6]);
+			        			tem.penaltyShotHits+=Integer.parseInt(t[7]);
+			        			tem.penaltyShots+=Integer.parseInt(t[8]);
+			        			tem.rebounds+=Integer.parseInt(t[11]);
+			        			tem.assists+=Integer.parseInt(t[12]);
+			        			tem.steals+=Integer.parseInt(t[13]);
+			        			tem.blockShots+=Integer.parseInt(t[14]);
+			        			tem.scores+=Integer.parseInt(t[17]);
+			        			tem.averageScores=tem.scores/(tem.inMatches*1.0);	
+			        			tem.averageScores=Double.valueOf(df.format(tem.averageScores));
+			        			tem.averageAssists=tem.assists/(tem.inMatches*1.0);
+			        			tem.averageAssists=Double.valueOf(df.format(tem.averageAssists));
+			        			tem.averageBlocks=tem.blockShots/(tem.inMatches*1.0);
+			        			tem.averageBlocks=Double.valueOf(df.format(tem.averageBlocks));
+			        			tem.averageSteals=tem.steals/(tem.inMatches*1.0);
+			        			tem.averageSteals=Double.valueOf(df.format(tem.averageSteals));
+			        			tem.averageRebounds=tem.rebounds/(tem.inMatches*1.0);
+			        			tem.averageRebounds=Double.valueOf(df.format(tem.averageRebounds));
+			        			if(tem.shots==0)
+			        				tem.shotHitRate=0.0;
+			        			else{
+			        			tem.shotHitRate=tem.shotHits/(tem.shots*1.0);
+			        			tem.shotHitRate=Double.valueOf(cf.format(tem.shotHitRate));
+			        			}
+			        			if(tem.threeShots==0)
+			        				tem.threeShotRate=0.0;
+			        			else{
+			        			tem.threeShotRate=tem.threeShotHits/(tem.threeShots*1.0);
+			        			tem.threeShotRate=Double.valueOf(cf.format(tem.threeShotRate));
+			        			}
+			        			if(tem.penaltyShots==0)
+			        				tem.penaltyShotRate=0.0;
+			        			else{
+			        			tem.penaltyShotRate=tem.penaltyShotHits/(tem.penaltyShots*1.0);
+			        			tem.penaltyShotRate=Double.valueOf(cf.format(tem.penaltyShotRate));
+			        			}
+			        			}
+			        		memberList.remove(j);
+			        		memberList.add(j,tem);
+			        	}
+			        }
+			    }
+			    return memberList;
+		}
 	
-		public  ArrayList<MemberPO> newMemberList()throws IOException {
-			ArrayList<MemberPO> memberList=new ArrayList<MemberPO>();
-		    List<File> files = getFiles("newData");
+	
+		
+		
+		public  ArrayList<ProgressPlayer> progressMemberList()throws IOException {
+			ArrayList<ProgressPlayer> memberList=new ArrayList<ProgressPlayer>();
+			
+			List<File> files = getFiles("newData");
 		    for(File f : files){
 		    	int first=0,second=0;
 		    	ArrayList<String[]> dataList=new ArrayList<String[]>();
@@ -449,10 +642,10 @@ public class MemberData implements MemberDataService{
 		        }//得到文档的队伍名称以及位置
 		        for(int i=first+1;i<second;i++){
 		        	String temp=dataList.get(i)[0];
-		        	MemberPO te=new MemberPO();
+		        	ProgressPlayer te=new ProgressPlayer();
 		        	te.name=temp;
 		        	boolean contain=false;
-		        	for(MemberPO a:memberList){
+		        	for(ProgressPlayer a:memberList){
 		        		if(a.name.equals(temp))
 		        			contain=true;
 		        	}
@@ -462,10 +655,10 @@ public class MemberData implements MemberDataService{
 		        }
 		        for(int i=second+1;i<dataList.size();i++){
 		        	String temp=dataList.get(i)[0];
-		        	MemberPO te=new MemberPO();
+		        	ProgressPlayer te=new ProgressPlayer();
 		        	te.name=temp;
 		        	boolean contain=false;
-		        	for(MemberPO a:memberList){
+		        	for(ProgressPlayer a:memberList){
 		        		if(a.name.equals(temp))
 		        			contain=true;
 		        	}
@@ -474,8 +667,43 @@ public class MemberData implements MemberDataService{
 		        	}
 		        }
 		    }
-		    for(File f : files){
-		    	int first=0,second=0;
+		    
+		    String []temp=files.get(0).getName().split("_");
+	    	String firstTime=temp[1];
+	    	ArrayList<File> firstFile=new ArrayList<File>();
+	    	ArrayList<File> nextFile=new ArrayList<File>();
+	    	if(firstTime.split("-")[0].equals("01")){
+	    		for(File f:files){
+	    	    	String time=f.getName().split("_")[1];
+	    	    	if(time.split("-")[0].equals("10"))
+	    				break;
+	    			nextFile.add(f);
+	    		}
+	    		for(File f:files){
+	    			String time=f.getName().split("_")[1];
+	    			if(time.split("-")[0].equals("01"))
+	    				continue;
+	    			if(time.split("-")[0].equals("02"))
+	    				continue;
+	    			if(time.split("-")[0].equals("03"))
+	    				continue;
+	    			if(time.split("-")[0].equals("04"))
+	    				continue;
+	    			firstFile.add(f);
+	    		}
+	    		
+	    		for(File f:nextFile){
+	    			firstFile.add(f);
+	    		}
+	    	}
+	    	else{
+	    		for(File f:files){
+	    			firstFile.add(f);
+	    		}
+	    	}
+	    	
+	    	for(File f:firstFile){
+	    		int first=0,second=0;
 		    	ArrayList<String[]> dataList=new ArrayList<String[]>();
 		        dataList=getContentByLocalFile(f);
 		        for(int i=0;i<dataList.size();i++){
@@ -501,49 +729,10 @@ public class MemberData implements MemberDataService{
 		        		t[17]=String.valueOf(Integer.parseInt(dataList.get(0)[2].split("-")[0])-memberAll);
 		        	}
 		        	for(int j=0;j<memberList.size();j++){
-		        		MemberPO tem=memberList.get(j);
+		        		ProgressPlayer tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
-		        			
+		        			tem.team=dataList.get(first)[0];
 		        			tem.inMatches+=1;
-		        			tem.shotHits+=Integer.parseInt(t[3]);
-		        			tem.shots+=Integer.parseInt(t[4]);
-		        			tem.threeShotHits+=Integer.parseInt(t[5]);
-		        			tem.threeShots+=Integer.parseInt(t[6]);
-		        			tem.penaltyShotHits+=Integer.parseInt(t[7]);
-		        			tem.penaltyShots+=Integer.parseInt(t[8]);
-		        			tem.rebounds+=Integer.parseInt(t[11]);
-		        			tem.assists+=Integer.parseInt(t[12]);
-		        			tem.steals+=Integer.parseInt(t[13]);
-		        			tem.blockShots+=Integer.parseInt(t[14]);
-		        			tem.scores+=Integer.parseInt(t[17]);
-		        			tem.averageScores=tem.scores/(tem.inMatches*1.0);	
-		        			tem.averageScores=Double.valueOf(df.format(tem.averageScores));
-		        			tem.averageAssists=tem.assists/(tem.inMatches*1.0);
-		        			tem.averageAssists=Double.valueOf(df.format(tem.averageAssists));
-		        			tem.averageBlocks=tem.blockShots/(tem.inMatches*1.0);
-		        			tem.averageBlocks=Double.valueOf(df.format(tem.averageBlocks));
-		        			tem.averageSteals=tem.steals/(tem.inMatches*1.0);
-		        			tem.averageSteals=Double.valueOf(df.format(tem.averageSteals));
-		        			tem.averageRebounds=tem.rebounds/(tem.inMatches*1.0);
-		        			tem.averageRebounds=Double.valueOf(df.format(tem.averageRebounds));
-		        			if(tem.shots==0)
-		        				tem.shotHitRate=0.0;
-		        			else{
-		        			tem.shotHitRate=tem.shotHits/(tem.shots*1.0);
-		        			tem.shotHitRate=Double.valueOf(cf.format(tem.shotHitRate));
-		        			}
-		        			if(tem.threeShots==0)
-		        				tem.threeShotRate=0.0;
-		        			else{
-		        			tem.threeShotRate=tem.threeShotHits/(tem.threeShots*1.0);
-		        			tem.threeShotRate=Double.valueOf(cf.format(tem.threeShotRate));
-		        			}
-		        			if(tem.penaltyShots==0)
-		        				tem.penaltyShotRate=0.0;
-		        			else{
-		        			tem.penaltyShotRate=tem.penaltyShotHits/(tem.penaltyShots*1.0);
-		        			tem.penaltyShotRate=Double.valueOf(cf.format(tem.penaltyShotRate));
-		        			}
 		        			if(tem.inMatches==1){
 		        				tem.firstScore=Integer.parseInt(t[17]);
 		        				tem.firstRebound=Integer.parseInt(t[11]);
@@ -574,13 +763,13 @@ public class MemberData implements MemberDataService{
 		        				tem.fifthAssist=Integer.parseInt(t[12]);
 		        			}
 		        			if(tem.inMatches>5){
-		        				int temp=tem.firstScore;
+		        				int temp0=tem.firstScore;
 		        				tem.firstScore=tem.secondScore;
 		        				tem.secondScore=tem.thirdScore;
 		        				tem.thirdScore=tem.fourthScore;
 		        				tem.fourthScore=tem.fifthScore;
 		        				tem.fifthScore=Integer.parseInt(t[17]);
-		        				tem.beforeFiveAverageScore=(tem.beforeFiveAverageScore*(tem.inMatches-6)+temp)/((tem.inMatches-5)*1.0);
+		        				tem.beforeFiveAverageScore=(tem.beforeFiveAverageScore*(tem.inMatches-6)+temp0)/((tem.inMatches-5)*1.0);
 		        				tem.fiveAverageScore=(tem.firstScore+tem.secondScore+tem.thirdScore+tem.fourthScore+tem.fifthScore)/5.0;
 		        				if(tem.beforeFiveAverageScore>0)
 			        				tem.scoreProgressRate=(tem.fiveAverageScore-tem.beforeFiveAverageScore)/(tem.beforeFiveAverageScore*1.0);
@@ -628,48 +817,10 @@ public class MemberData implements MemberDataService{
 		        		t[17]=String.valueOf(Integer.parseInt(dataList.get(0)[2].split("-")[1])-memberAll);
 		        	}
 		        	for(int j=0;j<memberList.size();j++){
-		        		MemberPO tem=memberList.get(j);
+		        		ProgressPlayer tem=memberList.get(j);
 		        		if(tem.name.equals(t[0])){
 		        			tem.inMatches+=1;
-		        			tem.shotHits+=Integer.parseInt(t[3]);
-		        			tem.shots+=Integer.parseInt(t[4]);
-		        			tem.threeShotHits+=Integer.parseInt(t[5]);
-		        			tem.threeShots+=Integer.parseInt(t[6]);
-		        			tem.penaltyShotHits+=Integer.parseInt(t[7]);
-		        			tem.penaltyShots+=Integer.parseInt(t[8]);
-		        			tem.rebounds+=Integer.parseInt(t[11]);
-		        			tem.assists+=Integer.parseInt(t[12]);
-		        			tem.steals+=Integer.parseInt(t[13]);
-		        			tem.blockShots+=Integer.parseInt(t[14]);
-		        			tem.scores+=Integer.parseInt(t[17]);
-		        			tem.averageScores=tem.scores/(tem.inMatches*1.0);	
-		        			tem.averageScores=Double.valueOf(df.format(tem.averageScores));
-		        			tem.averageAssists=tem.assists/(tem.inMatches*1.0);
-		        			tem.averageAssists=Double.valueOf(df.format(tem.averageAssists));
-		        			tem.averageBlocks=tem.blockShots/(tem.inMatches*1.0);
-		        			tem.averageBlocks=Double.valueOf(df.format(tem.averageBlocks));
-		        			tem.averageSteals=tem.steals/(tem.inMatches*1.0);
-		        			tem.averageSteals=Double.valueOf(df.format(tem.averageSteals));
-		        			tem.averageRebounds=tem.rebounds/(tem.inMatches*1.0);
-		        			tem.averageRebounds=Double.valueOf(df.format(tem.averageRebounds));
-		        			if(tem.shots==0)
-		        				tem.shotHitRate=0.0;
-		        			else{
-		        			tem.shotHitRate=tem.shotHits/(tem.shots*1.0);
-		        			tem.shotHitRate=Double.valueOf(cf.format(tem.shotHitRate));
-		        			}
-		        			if(tem.threeShots==0)
-		        				tem.threeShotRate=0.0;
-		        			else{
-		        			tem.threeShotRate=tem.threeShotHits/(tem.threeShots*1.0);
-		        			tem.threeShotRate=Double.valueOf(cf.format(tem.threeShotRate));
-		        			}
-		        			if(tem.penaltyShots==0)
-		        				tem.penaltyShotRate=0.0;
-		        			else{
-		        			tem.penaltyShotRate=tem.penaltyShotHits/(tem.penaltyShots*1.0);
-		        			tem.penaltyShotRate=Double.valueOf(cf.format(tem.penaltyShotRate));
-		        			}
+		        			tem.team=dataList.get(second)[0];
 		        			if(tem.inMatches==1){
 		        				tem.firstScore=Integer.parseInt(t[17]);
 		        				tem.firstRebound=Integer.parseInt(t[11]);
@@ -700,13 +851,13 @@ public class MemberData implements MemberDataService{
 		        				tem.fifthAssist=Integer.parseInt(t[12]);
 		        			}
 		        			if(tem.inMatches>5){
-		        				int temp=tem.firstScore;
+		        				int temp0=tem.firstScore;
 		        				tem.firstScore=tem.secondScore;
 		        				tem.secondScore=tem.thirdScore;
 		        				tem.thirdScore=tem.fourthScore;
 		        				tem.fourthScore=tem.fifthScore;
 		        				tem.fifthScore=Integer.parseInt(t[17]);
-		        				tem.beforeFiveAverageScore=(tem.beforeFiveAverageScore*(tem.inMatches-6)+temp)/((tem.inMatches-5)*1.0);
+		        				tem.beforeFiveAverageScore=(tem.beforeFiveAverageScore*(tem.inMatches-6)+temp0)/((tem.inMatches-5)*1.0);
 		        				tem.fiveAverageScore=(tem.firstScore+tem.secondScore+tem.thirdScore+tem.fourthScore+tem.fifthScore)/5.0;
 		        				if(tem.beforeFiveAverageScore>0)
 			        				tem.scoreProgressRate=(tem.fiveAverageScore-tem.beforeFiveAverageScore)/(tem.beforeFiveAverageScore*1.0);
@@ -742,15 +893,13 @@ public class MemberData implements MemberDataService{
 		        		memberList.add(j,tem);
 		        	}
 		        }
-		    }
-		    return memberList;
+	    	}
+			return memberList;
 		}
 		public MemberPO getMemberLiveData(String name)throws IOException{
 			
 			MemberPO result=new MemberPO();
-			
 			result.name=name;
-			
 			String location="players//info//"+name;
 			try{
 			BufferedReader br=new BufferedReader(new InputStreamReader(new FileInputStream(location),"UTF-8"));  
@@ -766,8 +915,7 @@ public class MemberData implements MemberDataService{
 						}
 						if(a.charAt(i)=='│'){
 							forward=i;
-						}
-						
+						}					
 					}
 					result.position=a.substring(forward+1,back).trim();
 				}
@@ -778,8 +926,7 @@ public class MemberData implements MemberDataService{
 						}
 						if(a.charAt(i)=='│'){
 							forward=i;
-						}
-						
+						}				
 					}
 					result.number=a.substring(forward+1,back).trim();
 				}
@@ -790,8 +937,7 @@ public class MemberData implements MemberDataService{
 						}
 						if(a.charAt(i)=='│'){
 							forward=i;
-						}
-						
+						}			
 					}
 					result.height=a.substring(forward+1,back).trim();
 				}
@@ -802,8 +948,7 @@ public class MemberData implements MemberDataService{
 						}
 						if(a.charAt(i)=='│'){
 							forward=i;
-						}
-						
+						}			
 					}
 					result.weight=a.substring(forward+1,back).trim();
 				}
@@ -814,8 +959,7 @@ public class MemberData implements MemberDataService{
 						}
 						if(a.charAt(i)=='│'){
 							forward=i;
-						}
-						
+						}		
 					}
 					result.birth=a.substring(forward+1,back).trim();
 				}
@@ -826,8 +970,7 @@ public class MemberData implements MemberDataService{
 						}
 						if(a.charAt(i)=='│'){
 							forward=i;
-						}
-						
+						}	
 					}
 					result.age=a.substring(forward+1,back).trim();
 				}
@@ -839,7 +982,6 @@ public class MemberData implements MemberDataService{
 						if(a.charAt(i)=='│'){
 							forward=i;
 						}
-						
 					}
 					result.exp=a.substring(forward+1,back).trim();
 				}
@@ -856,8 +998,6 @@ public class MemberData implements MemberDataService{
 					result.school=a.substring(forward+1,back).trim();
 				}
 			}
-			
-			
 			}
 			catch(FileNotFoundException e){
 				result.number=null;
@@ -868,20 +1008,52 @@ public class MemberData implements MemberDataService{
 				result.age=null;
 				result.exp=null;
 				result.school=null;
-				
 			}
-			
-			
-			
-			
-			
-			
 			return result;
-			
 		}
 		
 		
-		
+		public ArrayList<String[]> todayMembers()throws IOException{
+			MatchData md=new MatchData();
+			ArrayList<String[]> memberList=new ArrayList<String[]>();
+			String time=null;
+			List<File> files = getFiles("newData");
+			String lastTime=null;
+			String todayTime=null;
+			String []temp2=files.get(0).getName().split("_");
+	    	String firstTime=temp2[1];
+	    	if(firstTime.split("-")[0].equals("01")){
+		    for(File f : files){
+		    	String []temp=f.getName().split("_");
+		    	time=temp[1];
+		    	if(time.split("-")[0].equals("10")){
+		    		todayTime=lastTime;
+		    		break;
+		    	}
+		    	lastTime=time;
+		    }
+	    	}
+	    	else{
+	    		for(File f : files){
+			    	String []temp=f.getName().split("_");
+			    	todayTime=temp[1];
+			    }
+	    	}
+		    todayTime="_"+todayTime;
+		    for(File f:files){
+		    	if(f.getName().contains(todayTime)){
+		    		MatchPO temp=md.getMatch(f.getName());
+		    		for(int i=0;i<temp.getPlayers1().length;i++){
+		    			memberList.add(temp.getPlayers1()[i]);
+		    		}
+		    		for(int i=0;i<temp.getPlayers2().length;i++){
+		    			memberList.add(temp.getPlayers2()[i]);
+		    		}
+		    		
+		    	}
+		    }
+		    return memberList;
+		}
 		
 		
 		
@@ -927,47 +1099,7 @@ public class MemberData implements MemberDataService{
 		       
 		}
 		
-		public ArrayList<String[]> todayMembers()throws IOException{
-			MatchData md=new MatchData();
-			ArrayList<String[]> memberList=new ArrayList<String[]>();
-			String time=null;
-			List<File> files = getFiles("newData");
-			String lastTime=null;
-			String todayTime=null;
-			String []temp2=files.get(0).getName().split("_");
-	    	String firstTime=temp2[1];
-	    	if(firstTime.split("-")[0].equals("01")){
-		    for(File f : files){
-		    	String []temp=f.getName().split("_");
-		    	time=temp[1];
-		    	if(time.split("-")[0].equals("10")){
-		    		todayTime=lastTime;
-		    		break;
-		    	}
-		    	lastTime=time;
-		    }
-	    	}
-	    	else{
-	    		for(File f : files){
-			    	String []temp=f.getName().split("_");
-			    	todayTime=temp[1];
-			    }
-	    	}
-		    todayTime="_"+todayTime;
-		    for(File f:files){
-		    	if(f.getName().contains(todayTime)){
-		    		MatchPO temp=md.getMatch(f.getName());
-		    		for(int i=0;i<temp.getPlayers1().length;i++){
-		    			memberList.add(temp.getPlayers1()[i]);
-		    		}
-		    		for(int i=0;i<temp.getPlayers2().length;i++){
-		    			memberList.add(temp.getPlayers2()[i]);
-		    		}
-		    		
-		    	}
-		    }
-		    return memberList;
-		}
+		
 		
 		public ArrayList<String[]> getMatchInfo(String name)throws IOException{
 			ArrayList<String[]> resultList=new ArrayList<String[]>();
@@ -1011,7 +1143,13 @@ public class MemberData implements MemberDataService{
 		
 		
 		
-		
+		public static void main(String[] args)throws IOException{
+			MemberData md=new MemberData();
+			ArrayList<ProgressPlayer> memberList=md.progressMemberList();
+			for(ProgressPlayer s:memberList){
+				System.out.println(s.name+s.scoreProgressRate);
+			}
+		}
 		
 		
 		
